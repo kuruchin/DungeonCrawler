@@ -1,3 +1,5 @@
+using Inventory;
+using Inventory.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -293,6 +295,11 @@ public class GameManager : SingletonMonobehaviour<GameManager>
                     DisplayDungeonOverviewMap();
                 }
 
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    DisplayInventory();
+                }
+
                 break;
 
             // While engaging the boss handle the escape key for the pause menu
@@ -462,8 +469,19 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         if (isFading)
             return;
 
-        // Display dungeonOverviewMap
-        //DungeonMap.Instance.DisplayDungeonOverViewMap();
+        InventoryController inventoryController = player.inventoryController;
+
+        if (inventoryController == null)
+            return;
+
+        if (inventoryController.GetInventoryUI().isActiveAndEnabled == false)
+        {
+            player.inventoryController.ShowInventory();
+        }
+        else
+        {
+            player.inventoryController.HideInventory();
+        }
     }
 
 
