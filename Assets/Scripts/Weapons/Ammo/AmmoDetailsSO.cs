@@ -14,6 +14,7 @@ public class AmmoDetailsSO : ScriptableObject
     #endregion
     public string ammoName;
     public bool isPlayerAmmo;
+    public AmmoType ammoType;
 
     #region Header AMMO SPRITE, PREFAB & MATERIALS
     [Space(10)]

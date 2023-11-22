@@ -89,10 +89,7 @@ public class WeaponStatusUI : MonoBehaviour
         var startedWeapon = player.activeWeapon.GetCurrentWeapon();
 
         // Update active weapon status on the UI
-        if(startedWeapon != null)
-        {
-            SetActiveWeapon(startedWeapon);
-        }
+        SetActiveWeapon(startedWeapon);
     }
 
     /// <summary>
@@ -117,7 +114,7 @@ public class WeaponStatusUI : MonoBehaviour
     private void WeaponFired(Weapon weapon)
     {
         UpdateAmmoText(weapon);
-        UpdateAmmoLoadedIcons(weapon);
+        //UpdateAmmoLoadedIcons(weapon);
         UpdateReloadText(weapon);
     }
 
@@ -214,7 +211,8 @@ public class WeaponStatusUI : MonoBehaviour
         }
         else
         {
-            ammoRemainingText.text = weapon.weaponRemainingAmmo.ToString() + " / " + weapon.weaponDetails.weaponAmmoCapacity.ToString();
+            ammoRemainingText.text = weapon.weaponClipRemainingAmmo.ToString() + " / " + weapon.weaponRemainingAmmo.ToString();
+            //ammoRemainingText.text = weapon.weaponClipRemainingAmmo.ToString() + " / " + weapon.weaponDetails.weaponAmmoCapacity.ToString();
         }
     }
 

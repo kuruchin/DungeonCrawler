@@ -477,10 +477,14 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         if (inventoryController.GetInventoryUI().isActiveAndEnabled == false)
         {
             player.inventoryController.ShowInventory();
+
+            player.playerControl.DisablePlayer();
         }
         else
         {
             player.inventoryController.HideInventory();
+
+            player.playerControl.EnablePlayer();
         }
     }
 

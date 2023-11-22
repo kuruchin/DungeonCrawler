@@ -9,5 +9,9 @@ namespace Inventory.Model
     {
         [field: SerializeField]
         public string ParameterName { get; private set; }
+
+        [field: SerializeField]
+        public ItemParameterType ParameterType { get; private set; }
+
     }
 }

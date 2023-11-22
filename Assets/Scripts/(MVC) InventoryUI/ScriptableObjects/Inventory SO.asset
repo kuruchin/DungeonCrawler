@@ -15,54 +15,56 @@ MonoBehaviour:
   equipedItems:
   - item: {fileID: 0}
     quantity: 0
-    itemState:
-    - itemParameter: {fileID: 0}
-      value: 0
+    itemParameters: []
     storageType: 1
   - item: {fileID: 0}
     quantity: 0
-    itemState: []
+    itemParameters: []
     storageType: 1
   inventoryItems:
   - item: {fileID: 11400000, guid: 98523975b3f80b24b81275bd903067eb, type: 2}
     quantity: 33
-    itemState: []
+    itemParameters: []
     storageType: 0
   - item: {fileID: 11400000, guid: 98523975b3f80b24b81275bd903067eb, type: 2}
     quantity: 21
-    itemState: []
+    itemParameters: []
     storageType: 0
   - item: {fileID: 11400000, guid: 2987c6df76bec9d4c82ccc7f166efbac, type: 2}
     quantity: 1
-    itemState: []
+    itemParameters: []
+    storageType: 0
+  - item: {fileID: 11400000, guid: ac489cf0cec475e4a9a7d9fb91d7ca99, type: 2}
+    quantity: 1
+    itemParameters:
+    - itemParameter: {fileID: 11400000, guid: 095306fb71eee094e9b27ac30fcec610, type: 2}
+      value: 3
+    storageType: 0
+  - item: {fileID: 11400000, guid: ac489cf0cec475e4a9a7d9fb91d7ca99, type: 2}
+    quantity: 1
+    itemParameters:
+    - itemParameter: {fileID: 11400000, guid: 095306fb71eee094e9b27ac30fcec610, type: 2}
+      value: 3
     storageType: 0
   - item: {fileID: 0}
     quantity: 0
-    itemState: []
+    itemParameters: []
     storageType: 0
   - item: {fileID: 0}
     quantity: 0
-    itemState: []
+    itemParameters: []
     storageType: 0
   - item: {fileID: 0}
     quantity: 0
-    itemState: []
+    itemParameters: []
     storageType: 0
   - item: {fileID: 0}
     quantity: 0
-    itemState: []
+    itemParameters: []
     storageType: 0
   - item: {fileID: 0}
     quantity: 0
-    itemState: []
-    storageType: 0
-  - item: {fileID: 0}
-    quantity: 0
-    itemState: []
-    storageType: 0
-  - item: {fileID: 0}
-    quantity: 0
-    itemState: []
+    itemParameters: []
     storageType: 0
   StorageSize: 0a00000002000000
   <EquipedSize>k__BackingField: 2

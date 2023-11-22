@@ -165,12 +165,15 @@ public class Player : MonoBehaviour
     /// </summary>
     public Weapon AddWeaponToPlayer(WeaponDetailsSO weaponDetails)
     {
+        // Get total ammo in inventory
+        int totalAmmo = inventoryController.GetTotalAmmoByType(weaponDetails.weaponCurrentAmmo.ammoType);
+
         Weapon weapon = new Weapon() 
         { 
             weaponDetails = weaponDetails, 
             weaponReloadTimer = 0f, 
             weaponClipRemainingAmmo = weaponDetails.weaponClipAmmoCapacity, 
-            weaponRemainingAmmo = weaponDetails.weaponAmmoCapacity, 
+            weaponRemainingAmmo = totalAmmo,//weaponDetails.weaponAmmoCapacity, 
             isWeaponReloading = false 
         };
 
@@ -213,14 +216,31 @@ public class Player : MonoBehaviour
 
         foreach (var item in inventoryState[StorageType.EquipedWeapon])
         {
-            var weaponDetails = (item.Value.item as EquippableItemSO).weaponDetails;
+            EquippableItemSO equipableItem = item.Value.item as EquippableItemSO;
+
+            if (equipableItem == null) continue;
+
+            // Get WeaponDetailsSO
+            WeaponDetailsSO weaponDetails = equipableItem.weaponDetails;
+
+            // Get Clip Ammo Remaining
+            ItemParameter clipAmmoRemainingParameter = equipableItem.GetParameter(ItemParameterType.ClipAmmoRemaining);
+            int clipAmmoRemaining = 0;
+            if (clipAmmoRemainingParameter.itemParameter != null)
+            {
+                // converting float to int
+                clipAmmoRemaining = (int)clipAmmoRemainingParameter.value;
+            }
+
+            // Get total ammo in inventory
+            int totalAmmo = inventoryController.GetTotalAmmoByType(weaponDetails.weaponCurrentAmmo.ammoType);
 
             Weapon weapon = new Weapon()
             {
                 weaponDetails = weaponDetails,
                 weaponReloadTimer = 0f,
-                weaponClipRemainingAmmo = weaponDetails.weaponClipAmmoCapacity,
-                weaponRemainingAmmo = weaponDetails.weaponAmmoCapacity,
+                weaponClipRemainingAmmo = clipAmmoRemaining,
+                weaponRemainingAmmo = totalAmmo,//weaponDetails.weaponAmmoCapacity,
                 isWeaponReloading = false
             };
 

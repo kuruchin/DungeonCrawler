@@ -15,6 +15,22 @@ namespace Inventory.Model
         [SerializeField]
         private List<InventoryItem> inventoryItems = new List<InventoryItem>();
 
+        [SerializeField]
+        private Dictionary<AmmoType, int> ammoTotal = new Dictionary<AmmoType, int>();
+
+        public int GetAmmoCount(AmmoType ammoType)
+        {
+            if (ammoTotal.TryGetValue(ammoType, out int ammoCount))
+            {
+                return ammoCount;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+
         public int[] StorageSize = { 10, 2 };
 
         [field: SerializeField]
@@ -44,6 +60,12 @@ namespace Inventory.Model
                 {
                     itemList.Add(InventoryItem.GetEmptyItem(storageType));
                 }
+            }
+
+            // Initializing 0 values for each ammo types
+            foreach (AmmoType ammoType in Enum.GetValues(typeof(AmmoType)))
+            {
+                ammoTotal.Add(ammoType, 0);
             }
         }
 
@@ -145,7 +167,7 @@ namespace Inventory.Model
                     return;
                 int reminder = inventoryItems[itemIndex].quantity - amount;
                 if (reminder <= 0)
-                    inventoryItems[itemIndex] = InventoryItem.GetEmptyItem(StorageType.Inventory); //!!!!!!!!!!!!!!!!!! REWORK
+                    inventoryItems[itemIndex] = InventoryItem.GetEmptyItem(StorageType.Inventory); //!!!!!!!!!!!!!!!!!! TODO: REWORK
                 else
                     inventoryItems[itemIndex] = inventoryItems[itemIndex].ChangeQuantity(reminder);
 
@@ -241,10 +263,57 @@ namespace Inventory.Model
             InformAboutChange(isInventoryOnlyChanged);
         }
 
-        private void InformAboutChange(bool isInventoryOnlyChanged = false)
+        private void InformAboutChange(bool isInventoryStorageOnlyChanged = false)
         {
             Debug.Log("Inventory update");
-            OnInventoryUpdated?.Invoke(isInventoryOnlyChanged, GetCurrentInventoryState());
+            UpdateAmmoTotal();
+
+            OnInventoryUpdated?.Invoke(isInventoryStorageOnlyChanged, GetCurrentInventoryState());
+        }
+
+        public void UpdateClipAmmo(Weapon weapon)
+        {
+            int weaponListPosition = weapon.weaponListPosition;  // Weapon counting starts from 1
+            int clipRemainingAmmo = weapon.weaponClipRemainingAmmo;
+
+            var itemParameters = equipedItems[weaponListPosition].itemParameters;
+
+            for (int i = 0; i < itemParameters.Count; i++)
+            {
+                if (itemParameters[i].IsParameterTypeEquals(ItemParameterType.ClipAmmoRemaining))
+                {
+                    itemParameters[i] = itemParameters[i].ChangeValue(clipRemainingAmmo);
+                    break;
+                }
+            }
+        }
+
+        private void UpdateAmmoTotal()
+        {
+            foreach (AmmoType ammoType in Enum.GetValues(typeof(AmmoType)))
+            {
+                int ammoCount = 0;
+
+                foreach (InventoryItem inventoryItem in inventoryItems)
+                {
+                    // Check on AmmoItemSO every inventory item
+                    var ammoItem = inventoryItem.item as AmmoItemSO;
+
+                    if (ammoItem != null)
+                    {
+                        if (ammoItem.ammoType == ammoType)
+                        {
+                            ammoCount += inventoryItem.quantity;
+                        }
+                    }
+                }
+
+                if (ammoTotal.ContainsKey(ammoType))
+                {
+                    // If the type is already in the dictionary, set its number
+                    ammoTotal[ammoType] = ammoCount;
+                }
+            }
         }
     }
 

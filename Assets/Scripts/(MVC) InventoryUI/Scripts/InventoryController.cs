@@ -29,17 +29,18 @@ namespace Inventory
 
         private Player player;
 
+
         private void Start()
         {
             inventoryUI = FindObjectOfType<UIInventoryPage>();
 
-            if(inventoryUI != null)
+            player = GetComponent<Player>();
+
+            if (inventoryUI != null)
             {
                 PrepareUI();
                 PrepareInventoryData();
             }
-
-            player = GetComponent<Player>();
         }
 
         public void Update()
@@ -57,11 +58,38 @@ namespace Inventory
                     continue;
                 inventoryData.AddItem(StorageType.Inventory, item);
             }
+
+            // Subscribe to weapon fired event
+            player.weaponFiredEvent.OnWeaponFired += WeaponFiredEvent_OnWeaponFired;
+
+            // Subscribe to weapon reloaded event
+            player.weaponReloadedEvent.OnWeaponReloaded += WeaponReloadedEvent_OnWeaponReloaded;
         }
 
         private void OnDisable()
         {
             inventoryData.OnInventoryUpdated -= HandleInventoryUpdate;
+
+            player.weaponFiredEvent.OnWeaponFired -= WeaponFiredEvent_OnWeaponFired;
+
+            // Unsubscribe from weapon reloaded event
+            player.weaponReloadedEvent.OnWeaponReloaded -= WeaponReloadedEvent_OnWeaponReloaded;
+        }
+
+        /// <summary>
+        /// Handle Weapon fired event by updating clip ammo capacity
+        /// </summary>
+        private void WeaponFiredEvent_OnWeaponFired(WeaponFiredEvent weaponFiredEvent, WeaponFiredEventArgs weaponFiredEventArgs)
+        {
+            inventoryData.UpdateClipAmmo(weaponFiredEventArgs.weapon);
+        }
+
+        /// <summary>
+        /// Handle weapon reloaded event by updating clip ammo capacity
+        /// </summary>
+        private void WeaponReloadedEvent_OnWeaponReloaded(WeaponReloadedEvent weaponReloadedEvent, WeaponReloadedEventArgs weaponReloadedEventArgs)
+        {
+            inventoryData.UpdateClipAmmo(weaponReloadedEventArgs.weapon);
         }
 
         private void HandleInventoryUpdate(bool isInventoryOnlyChanged, Dictionary<StorageType, Dictionary<int, InventoryItem>> inventoryState)
@@ -74,6 +102,8 @@ namespace Inventory
 
             UpdateInventoryUI(inventoryState);
         }
+
+
 
         public void ShowInventory()
         {
@@ -223,6 +253,11 @@ namespace Inventory
         public UIInventoryPage GetInventoryUI()
         {
             return inventoryUI;
+        }
+
+        public int GetTotalAmmoByType(AmmoType ammotype)
+        {
+            return inventoryData.GetAmmoCount(ammotype);
         }
     }
 }

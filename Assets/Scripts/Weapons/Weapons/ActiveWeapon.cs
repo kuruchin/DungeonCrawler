@@ -53,7 +53,10 @@ public class ActiveWeapon : MonoBehaviour
 
         if (currentWeapon.weaponDetails == null)
         {
+            // Clear sprite
             weaponSpriteRenderer.sprite = null;
+            // Reset collider
+            weaponPolygonCollider2D.pathCount = 0;
             return;
         }
 

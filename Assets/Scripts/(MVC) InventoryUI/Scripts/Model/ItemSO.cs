@@ -28,6 +28,19 @@ namespace Inventory.Model
         [field: SerializeField]
         public List<ItemParameter> DefaultParametersList { get; set; }
 
+        // Method for getting ItemParameter
+        public ItemParameter GetParameter(ItemParameterType itemParameterType)
+        {
+            foreach (ItemParameter item in DefaultParametersList)
+            {
+                if (item.IsParameterTypeEquals(itemParameterType))
+                {
+                    return item;
+                }
+            }
+            // if it is absent
+            return new ItemParameter { itemParameter = null, value = 0 };
+        }
     }
 
     [Serializable]
@@ -39,6 +52,20 @@ namespace Inventory.Model
         public bool Equals(ItemParameter other)
         {
             return other.itemParameter == itemParameter;
+        }
+
+        public bool IsParameterTypeEquals(ItemParameterType itemParameterType)
+        {
+            return itemParameterType == itemParameter.ParameterType;
+        }
+
+        public ItemParameter ChangeValue(float newValue)
+        {
+            return new ItemParameter
+            {
+                itemParameter = this.itemParameter,
+                value = newValue
+            };
         }
     }
 }

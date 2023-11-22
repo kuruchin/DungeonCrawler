@@ -52,3 +52,16 @@ public enum GameState
     dungeonOverviewMap,
     restartGame
 }
+
+public enum ItemParameterType
+{
+    None,
+    ClipAmmoRemaining,
+    AmmoCapacity
+}
+
+public enum AmmoType
+{
+    FirstType,
+    SecondType
+}
