@@ -59,6 +59,7 @@ public class PickUpSystem : MonoBehaviour
                         item.DestroyItem();
                     else
                         item.Quantity = reminder;
+                    break;
                 }
             }
         }

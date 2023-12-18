@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -35,7 +36,7 @@ using UnityEngine.Rendering;
 #endregion REQUIRE COMPONENTS
 
 [DisallowMultipleComponent]
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDestroyable
 {
     [HideInInspector] public EnemyDetailsSO enemyDetails;
     private HealthEvent healthEvent;
@@ -52,6 +53,8 @@ public class Enemy : MonoBehaviour
     private PolygonCollider2D polygonCollider2D;
     [HideInInspector] public SpriteRenderer[] spriteRendererArray;
     [HideInInspector] public Animator animator;
+
+    public Action<OnDestroyArgs> onDestroy { get; set; }
 
     private void Awake()
     {
@@ -91,15 +94,18 @@ public class Enemy : MonoBehaviour
     {
         if (healthEventArgs.healthAmount <= 0)
         {
-            EnemyDestroyed();
+            EnemyDestroyed(healthEventArgs);
         }
     }
 
     /// <summary>
     /// Enemy destroyed
     /// </summary>
-    private void EnemyDestroyed()
+    private void EnemyDestroyed(HealthEventArgs healthEventArgs)
     {
+        // TODO keep interface implementation and delete separate event implementation
+        onDestroy?.Invoke(new OnDestroyArgs { gameObject = this.gameObject, ammoType = healthEventArgs.ammoType });
+
         DestroyedEvent destroyedEvent = GetComponent<DestroyedEvent>();
         destroyedEvent.CallDestroyedEvent(false, health.GetStartingHealth());
     }

@@ -23,7 +23,7 @@ public class ReceiveContactDamage : MonoBehaviour
         if (contactDamageAmount > 0)
             damageAmount = contactDamageAmount;
 
-        health.TakeDamage(damageAmount);
+        health.TakeDamage(damageAmount, AmmoType.None);
     }
 
     #region Validation

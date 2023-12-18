@@ -77,7 +77,7 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Public method called when damage is taken
     /// </summary>
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, AmmoType ammoType)
     {
         bool isRolling = false;
 
@@ -87,7 +87,7 @@ public class Health : MonoBehaviour
         if (isDamageable && !isRolling)
         {
             currentHealth -= damageAmount;
-            CallHealthEvent(damageAmount);
+            CallHealthEvent(damageAmount, ammoType);
 
             PostHitImmunity();
 
@@ -149,10 +149,13 @@ public class Health : MonoBehaviour
 
     }
 
-    private void CallHealthEvent(int damageAmount)
+    /// <summary>
+    /// Setup OnHealthChanged event, default ammo type is None
+    /// </summary>
+    private void CallHealthEvent(int damageAmount, AmmoType ammoType = AmmoType.None)
     {
         // Trigger health event
-        healthEvent.CallHealthChangedEvent(((float)currentHealth / (float)startingHealth), currentHealth, damageAmount);
+        healthEvent.CallHealthChangedEvent(((float)currentHealth / (float)startingHealth), currentHealth, damageAmount, ammoType);
     }
 
 

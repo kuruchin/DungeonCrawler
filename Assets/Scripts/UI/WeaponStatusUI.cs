@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Inventory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,6 +68,9 @@ public class WeaponStatusUI : MonoBehaviour
 
         // Subscribe to weapon reloaded event
         player.weaponReloadedEvent.OnWeaponReloaded += WeaponReloadedEvent_OnWeaponReloaded;
+
+        // Subscribe to inventory updated event
+        player.inventoryController.OnInventoryUpdated += InventoryUpdatedEvent_OnInventoryUpdated;
     }
 
     private void OnDisable()
@@ -82,6 +86,9 @@ public class WeaponStatusUI : MonoBehaviour
 
         // Unsubscribe from weapon reloaded event
         player.weaponReloadedEvent.OnWeaponReloaded -= WeaponReloadedEvent_OnWeaponReloaded;
+
+        // Unsubscribe from inventory updated event
+        player.inventoryController.OnInventoryUpdated -= InventoryUpdatedEvent_OnInventoryUpdated;
     }
 
     private void Start()
@@ -113,7 +120,9 @@ public class WeaponStatusUI : MonoBehaviour
     /// </summary>
     private void WeaponFired(Weapon weapon)
     {
-        UpdateAmmoText(weapon);
+        var weaponRemainingAmmo = player.inventoryController.GetCurrentWeaponTotalAmmo();
+
+        UpdateAmmoText(weapon.weaponDetails.hasInfiniteAmmo, weapon.weaponClipRemainingAmmo, weaponRemainingAmmo);
         //UpdateAmmoLoadedIcons(weapon);
         UpdateReloadText(weapon);
     }
@@ -131,22 +140,52 @@ public class WeaponStatusUI : MonoBehaviour
     /// </summary>
     private void WeaponReloadedEvent_OnWeaponReloaded(WeaponReloadedEvent weaponReloadedEvent, WeaponReloadedEventArgs weaponReloadedEventArgs)
     {
-        WeaponReloaded(weaponReloadedEventArgs.weapon);
+        WeaponReloaded(weaponReloadedEventArgs.weapon, weaponReloadedEventArgs.totalRemainingAmmo);
     }
 
     /// <summary>
     /// Weapon has been reloaded - update UI if current weapon
     /// </summary>
-    private void WeaponReloaded(Weapon weapon)
+    private void WeaponReloaded(Weapon weapon, int totalRemainingAmmo)
     {
         // if weapon reloaded is the current weapon
         if (player.activeWeapon.GetCurrentWeapon() == weapon)
         {
             UpdateReloadText(weapon);
-            UpdateAmmoText(weapon);
+
+            //var weaponRemainingAmmo = player.inventoryController.GetCurrentWeaponTotalAmmo();
+            UpdateAmmoText(weapon.weaponDetails.hasInfiniteAmmo, weapon.weaponClipRemainingAmmo, totalRemainingAmmo);
+
             UpdateAmmoLoadedIcons(weapon);
             ResetWeaponReloadBar();
         }
+    }
+
+    /// <summary>
+    /// Handle inventory updated event on the UI
+    /// </summary>
+    private void InventoryUpdatedEvent_OnInventoryUpdated(InventoryUpdatedEventArgs inventoryUpdatedEventArgs)
+    {
+        var currentWeapon = player.activeWeapon.GetCurrentWeapon();
+
+        if(currentWeapon != null)
+        {
+            InventoryUpdated(currentWeapon);
+        }
+    }
+
+    /// <summary>
+    /// Inventory updated update UI
+    /// </summary>
+    private void InventoryUpdated(Weapon weapon)
+    {
+        //var currentWeaponAmmoType = currentWeapon.weaponDetails.weaponCurrentAmmo.ammoType;
+
+        var weaponRemainingAmmo = player.inventoryController.GetCurrentWeaponTotalAmmo();
+
+        UpdateAmmoText(weapon.weaponDetails.hasInfiniteAmmo, weapon.weaponClipRemainingAmmo, weaponRemainingAmmo);
+        //UpdateAmmoLoadedIcons(weapon);
+        //UpdateReloadText(weapon);
     }
 
     /// <summary>
@@ -167,7 +206,10 @@ public class WeaponStatusUI : MonoBehaviour
 
         UpdateActiveWeaponImage(weapon.weaponDetails);
         UpdateActiveWeaponName(weapon);
-        UpdateAmmoText(weapon);
+
+        var weaponRemainingAmmo = player.inventoryController.GetCurrentWeaponTotalAmmo();
+        UpdateAmmoText(weapon.weaponDetails.hasInfiniteAmmo, weapon.weaponClipRemainingAmmo, weaponRemainingAmmo);
+
         UpdateAmmoLoadedIcons(weapon);
 
         // If set weapon is still reloading then update reload bar
@@ -203,15 +245,18 @@ public class WeaponStatusUI : MonoBehaviour
     /// <summary>
     /// Update the ammo remaining text on the UI
     /// </summary>
-    private void UpdateAmmoText(Weapon weapon)
+    private void UpdateAmmoText(bool hasInfiniteAmmo, int weaponClipRemainingAmmo, int weaponRemainingAmmo)
     {
-        if (weapon.weaponDetails.hasInfiniteAmmo)
+        // weapon.weaponClipRemainingAmmo
+        // weapon.weaponRemainingAmmo
+        // weapon.weaponDetails.hasInfiniteAmmo
+        if (hasInfiniteAmmo)
         {
             ammoRemainingText.text = "INFINITE AMMO";
         }
         else
         {
-            ammoRemainingText.text = weapon.weaponClipRemainingAmmo.ToString() + " / " + weapon.weaponRemainingAmmo.ToString();
+            ammoRemainingText.text = weaponClipRemainingAmmo.ToString() + " / " + weaponRemainingAmmo.ToString();
             //ammoRemainingText.text = weapon.weaponClipRemainingAmmo.ToString() + " / " + weapon.weaponDetails.weaponAmmoCapacity.ToString();
         }
     }

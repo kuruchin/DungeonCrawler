@@ -39,7 +39,7 @@ namespace Inventory.Model
         [field: SerializeField]
         public int InventorySize { get; private set; } = 10;
 
-        public event Action<bool, Dictionary<StorageType, Dictionary<int, InventoryItem>>> OnInventoryUpdated;
+        public event Action<bool, Dictionary<StorageType, Dictionary<int, InventoryItem>>> OnInventoryModelUpdate;
 
         public void Initialize()
         {
@@ -159,20 +159,30 @@ namespace Inventory.Model
             return quantity;
         }
 
-        public void RemoveItem(int itemIndex, int amount)
+        public int RemoveItem(int itemIndex, int amount)
         {
+            int newAmount = 0;
+
             if (inventoryItems.Count > itemIndex)
             {
                 if (inventoryItems[itemIndex].IsEmpty)
-                    return;
-                int reminder = inventoryItems[itemIndex].quantity - amount;
-                if (reminder <= 0)
+                    return -1;
+
+                newAmount = inventoryItems[itemIndex].quantity - amount;
+
+                if (newAmount <= 0)
+                {
                     inventoryItems[itemIndex] = InventoryItem.GetEmptyItem(StorageType.Inventory); //!!!!!!!!!!!!!!!!!! TODO: REWORK
+                }
                 else
-                    inventoryItems[itemIndex] = inventoryItems[itemIndex].ChangeQuantity(reminder);
+                {
+                    inventoryItems[itemIndex] = inventoryItems[itemIndex].ChangeQuantity(newAmount);
+                }
 
                 InformAboutChange();
             }
+            // If there is no remainder after removal, return 0; otherwise, return the amount that has not been removed
+            return newAmount >= 0 ? 0 : -newAmount;
         }
 
         public void AddItem(StorageType storageType, InventoryItem item)
@@ -268,7 +278,7 @@ namespace Inventory.Model
             Debug.Log("Inventory update");
             UpdateAmmoTotal();
 
-            OnInventoryUpdated?.Invoke(isInventoryStorageOnlyChanged, GetCurrentInventoryState());
+            OnInventoryModelUpdate?.Invoke(isInventoryStorageOnlyChanged, GetCurrentInventoryState());
         }
 
         public void UpdateClipAmmo(Weapon weapon)
@@ -312,6 +322,29 @@ namespace Inventory.Model
                 {
                     // If the type is already in the dictionary, set its number
                     ammoTotal[ammoType] = ammoCount;
+                }
+            }
+        }
+
+        public void RemoveAmmoFromInventory(AmmoType ammoType, int ammoToRemove)
+        {
+            if(ammoTotal[ammoType] < ammoToRemove)
+            {
+                Debug.Log("Error at RemoveAmmoFromInventory");
+                return;
+            }
+
+            ammoTotal[ammoType] -= ammoToRemove;
+
+            while (ammoToRemove > 0)
+            {
+                int foundItemIndex = inventoryItems.FindLastIndex(i => i.item is AmmoItemSO && ((AmmoItemSO)i.item).ammoType == ammoType);
+
+                int remaindedAmmo = RemoveItem(foundItemIndex, ammoToRemove);
+
+                if(remaindedAmmo >= 0)
+                {
+                    ammoToRemove = remaindedAmmo;
                 }
             }
         }

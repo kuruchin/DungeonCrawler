@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1935190523975209475}
   - component: {fileID: -3022544974264993711}
   - component: {fileID: 2905566923918472474}
+  - component: {fileID: -8568162659356646748}
   m_Layer: 17
   m_Name: DestroyableItem
   m_TagString: Untagged
@@ -202,3 +203,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7470762224977111315}
+--- !u!114 &-8568162659356646748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498162341808410655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac1b5262fc664da47acef4a28eb44fae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsTable: {fileID: 11400000, guid: f73daa37359aa75478b5a7c0eefc67b8, type: 2}
+  chanceToDropAmmo: 0

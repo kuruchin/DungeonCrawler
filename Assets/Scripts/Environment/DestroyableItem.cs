@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 // Don't add require directives since we're destroying the components when the item is destroyed
 [DisallowMultipleComponent]
-public class DestroyableItem : MonoBehaviour
+public class DestroyableItem : MonoBehaviour, IDestroyable
 {
     #region Header HEALTH
     [Header("HEALTH")]
@@ -24,6 +25,8 @@ public class DestroyableItem : MonoBehaviour
     private HealthEvent healthEvent;
     private Health health;
     private ReceiveContactDamage receiveContactDamage;
+
+    public Action<OnDestroyArgs> onDestroy { get; set; }
 
     private void Awake()
     {
@@ -50,6 +53,7 @@ public class DestroyableItem : MonoBehaviour
     {
         if (healthEventArgs.healthAmount <= 0f)
         {
+            onDestroy?.Invoke(new OnDestroyArgs { gameObject = this.gameObject, ammoType = healthEventArgs.ammoType });
             StartCoroutine(PlayAnimation());
         }
     }

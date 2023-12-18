@@ -62,6 +62,8 @@ public enum ItemParameterType
 
 public enum AmmoType
 {
+    None,
     FirstType,
-    SecondType
+    SecondType,
+    ThirdType
 }

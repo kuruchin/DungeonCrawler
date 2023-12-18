@@ -30,6 +30,7 @@ public class ActiveWeapon : MonoBehaviour
     {
         // Load components
         setWeaponEvent = GetComponent<SetActiveWeaponEvent>();
+        currentWeapon = null;
     }
 
     private void OnEnable()
@@ -57,6 +58,8 @@ public class ActiveWeapon : MonoBehaviour
             weaponSpriteRenderer.sprite = null;
             // Reset collider
             weaponPolygonCollider2D.pathCount = 0;
+
+            currentWeapon = null;
             return;
         }
 

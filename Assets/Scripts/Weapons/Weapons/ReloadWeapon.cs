@@ -1,3 +1,4 @@
+using Inventory;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class ReloadWeapon : MonoBehaviour
     private ReloadWeaponEvent reloadWeaponEvent;
     private WeaponReloadedEvent weaponReloadedEvent;
     private SetActiveWeaponEvent setActiveWeaponEvent;
+    private InventoryController inventoryController;
     private Coroutine reloadWeaponCoroutine;
 
     private void Awake()
@@ -20,6 +22,7 @@ public class ReloadWeapon : MonoBehaviour
         reloadWeaponEvent = GetComponent<ReloadWeaponEvent>();
         weaponReloadedEvent = GetComponent<WeaponReloadedEvent>();
         setActiveWeaponEvent = GetComponent<SetActiveWeaponEvent>();
+        inventoryController = GetComponent<InventoryController>();
     }
 
     private void OnEnable()
@@ -66,11 +69,23 @@ public class ReloadWeapon : MonoBehaviour
     /// </summary>
     private IEnumerator ReloadWeaponRoutine(Weapon weapon, int topUpAmmoPercent)
     {
+        // Retrieve the remaining ammo from the inventory controller
+        int totalRemainingAmmo = 0;
+        if (inventoryController != null)
+        {
+            totalRemainingAmmo = inventoryController.GetCurrentWeaponTotalAmmo();
+        }
+
+        // Check for no ammo and break
+        if (totalRemainingAmmo == 0)
+        {
+            yield break;
+        }
+
         // Play reload sound if there is one
         if (weapon.weaponDetails.weaponReloadingSoundEffect != null)
         {
             SoundEffectManager.Instance.PlaySoundEffect(weapon.weaponDetails.weaponReloadingSoundEffect);
-
         }
 
         // Set weapon as reloading
@@ -100,22 +115,37 @@ public class ReloadWeapon : MonoBehaviour
             }
         }
 
-        // If weapon has infinite ammo then just refil the clip
+        // If the weapon has infinite ammo, simply refill the clip
         if (weapon.weaponDetails.hasInfiniteAmmo)
         {
             weapon.weaponClipRemainingAmmo = weapon.weaponDetails.weaponClipAmmoCapacity;
         }
-        // else if not infinite ammo then if remaining ammo is greater than the amount required to
-        // refill the clip, then fully refill the clip
-        else if (weapon.weaponRemainingAmmo >= weapon.weaponDetails.weaponClipAmmoCapacity)
-        {
-            weapon.weaponClipRemainingAmmo = weapon.weaponDetails.weaponClipAmmoCapacity;
-        }
-        // else set the clip to the remaining ammo
+        // If the ammo is not infinite, check if the remaining ammo is sufficient to
+        // fully refill the clip; if so, refill the clip entirely
         else
         {
-            weapon.weaponClipRemainingAmmo = weapon.weaponRemainingAmmo;
+            int neededAmmo = weapon.weaponDetails.weaponClipAmmoCapacity - weapon.weaponClipRemainingAmmo;
+
+            if (totalRemainingAmmo >= neededAmmo)
+            {
+                // Deduct the used ammo and set the clip to its maximum capacity
+                totalRemainingAmmo -= weapon.weaponDetails.weaponClipAmmoCapacity - weapon.weaponClipRemainingAmmo;
+                weapon.weaponClipRemainingAmmo = weapon.weaponDetails.weaponClipAmmoCapacity;
+            }
+            // Use all remaining ammo to partially refill the clip
+            else
+            {
+                weapon.weaponClipRemainingAmmo += totalRemainingAmmo;
+                totalRemainingAmmo = 0;
+            }
         }
+
+        // Set Weapon Remaining Ammo for none-infinite ammo weapon
+        //if (!weapon.weaponDetails.hasInfiniteAmmo)
+        //{
+        //    //weapon.weaponRemainingAmmo -= weapon.weaponClipRemainingAmmo;
+        //    totalRemainingAmmo -= weapon.weaponClipRemainingAmmo;
+        //}
 
         // Reset weapon reload timer
         weapon.weaponReloadTimer = 0f;
@@ -124,7 +154,7 @@ public class ReloadWeapon : MonoBehaviour
         weapon.isWeaponReloading = false;
 
         // Call weapon reloaded event
-        weaponReloadedEvent.CallWeaponReloadedEvent(weapon);
+        weaponReloadedEvent.CallWeaponReloadedEvent(weapon, totalRemainingAmmo);
 
     }
 

@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 1348897235664492448}
   - component: {fileID: 2774759844743651417}
   m_Layer: 0
-  m_Name: Item
+  m_Name: Item_ammo1
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -114,8 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f61dfe657cf444bab13f9ded752deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <InventoryItem>k__BackingField: {fileID: 11400000, guid: ac489cf0cec475e4a9a7d9fb91d7ca99, type: 2}
-  <Quantity>k__BackingField: 1
+  <InventoryItem>k__BackingField: {fileID: 11400000, guid: 510ec5885403a1c4693b0ac07541223d, type: 2}
+  <Quantity>k__BackingField: 5
   audioSource: {fileID: 2774759844743651417}
   duration: 0.3
 --- !u!82 &2774759844743651417

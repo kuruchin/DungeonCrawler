@@ -133,9 +133,6 @@ public class Player : MonoBehaviour
     /// </summary>
     private void CreatePlayerStartingWeapons()
     {
-        // Clear list
-        weaponList.Clear();
-
         // Populate weapon list from starting weapons
         foreach (WeaponDetailsSO weaponDetails in playerDetails.startingWeaponList)
         {
@@ -163,6 +160,7 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Add a weapon to the player weapon dictionary
     /// </summary>
+    /// TODO Rework
     public Weapon AddWeaponToPlayer(WeaponDetailsSO weaponDetails)
     {
         // Get total ammo in inventory
@@ -177,11 +175,8 @@ public class Player : MonoBehaviour
             isWeaponReloading = false 
         };
 
-        // Add the weapon to the list
-        weaponList.Add(weapon);
-
         // Set weapon position in list
-        weapon.weaponListPosition = weaponList.Count;
+        //weapon.weaponListPosition = weaponList.Count;
 
         // Set the added weapon as active
         setActiveWeaponEvent.CallSetActiveWeaponEvent(weapon);
@@ -203,20 +198,18 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    ////////////////////////////////////////// TODO refactor this
+    ////////////////////////////////////////// TODO delete this
 
     /// <summary>
     /// Add a weapon to the player weapon dictionary
     /// </summary>
     public void UpdateWeaponList(Dictionary<StorageType, Dictionary<int, InventoryItem>> inventoryState)
     {
-        weaponList.Clear();
-
         Weapon tempWeapon = new Weapon();
 
         foreach (var item in inventoryState[StorageType.EquipedWeapon])
         {
-            EquippableItemSO equipableItem = item.Value.item as EquippableItemSO;
+            var equipableItem = item.Value.item as EquippableItemSO;
 
             if (equipableItem == null) continue;
 
@@ -224,12 +217,15 @@ public class Player : MonoBehaviour
             WeaponDetailsSO weaponDetails = equipableItem.weaponDetails;
 
             // Get Clip Ammo Remaining
-            ItemParameter clipAmmoRemainingParameter = equipableItem.GetParameter(ItemParameterType.ClipAmmoRemaining);
+            List<ItemParameter> itemParametersList = item.Value.itemParameters;
             int clipAmmoRemaining = 0;
-            if (clipAmmoRemainingParameter.itemParameter != null)
+            foreach (ItemParameter itemParameter in itemParametersList)
             {
-                // converting float to int
-                clipAmmoRemaining = (int)clipAmmoRemainingParameter.value;
+                if (itemParameter.IsParameterTypeEquals(ItemParameterType.ClipAmmoRemaining))
+                {
+                    // converting float to int
+                    clipAmmoRemaining = (int)itemParameter.value;
+                }
             }
 
             // Get total ammo in inventory
@@ -246,9 +242,6 @@ public class Player : MonoBehaviour
 
             // Set weapon position in list
             weapon.weaponListPosition = item.Key;
-
-            // Add the weapon to the list
-            weaponList.Add(weapon);
 
             tempWeapon = weapon;
         }

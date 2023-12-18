@@ -104,8 +104,8 @@ public class FireWeapon : MonoBehaviour
     private bool IsWeaponReadyToFire()
     {
         // if there is no ammo and weapon doesn't have infinite ammo then return false.
-        if (activeWeapon.GetCurrentWeapon().weaponRemainingAmmo <= 0 && !activeWeapon.GetCurrentWeapon().weaponDetails.hasInfiniteAmmo)
-            return false;
+        //if (activeWeapon.GetCurrentWeapon().weaponRemainingAmmo <= 0 && !activeWeapon.GetCurrentWeapon().weaponDetails.hasInfiniteAmmo)
+        //    return false;
 
         // if the weapon is reloading then return false.
         if (activeWeapon.GetCurrentWeapon().isWeaponReloading)
@@ -116,10 +116,17 @@ public class FireWeapon : MonoBehaviour
             return false;
 
         // if no ammo in the clip and the weapon doesn't have infinite clip capacity then return false.
-        if (!activeWeapon.GetCurrentWeapon().weaponDetails.hasInfiniteClipCapacity && activeWeapon.GetCurrentWeapon().weaponClipRemainingAmmo <= 0)
+        if (!activeWeapon.GetCurrentWeapon().weaponDetails.hasInfiniteClipCapacity && 
+            activeWeapon.GetCurrentWeapon().weaponClipRemainingAmmo <= 0)
         {
-            // trigger a reload weapon event.
-            reloadWeaponEvent.CallReloadWeaponEvent(activeWeapon.GetCurrentWeapon(), 0);
+            AmmoType currentWeaponAmmoType = activeWeapon.GetCurrentWeapon().weaponDetails.weaponCurrentAmmo.ammoType;
+            int remainingAmmo = GameManager.Instance.GetPlayer().inventoryController.GetTotalAmmoByType(currentWeaponAmmoType);
+
+            if (remainingAmmo > 0)
+            {
+                // trigger a reload weapon event.
+                reloadWeaponEvent.CallReloadWeaponEvent(activeWeapon.GetCurrentWeapon(), 0);
+            }
 
             return false;
         }

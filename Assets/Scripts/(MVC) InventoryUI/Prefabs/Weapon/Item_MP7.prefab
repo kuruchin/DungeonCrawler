@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1348897235664492448}
   - component: {fileID: 2774759844743651417}
   m_Layer: 0
-  m_Name: Item_ammo1
+  m_Name: Item_MP7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,8 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f61dfe657cf444bab13f9ded752deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <InventoryItem>k__BackingField: {fileID: 11400000, guid: 510ec5885403a1c4693b0ac07541223d, type: 2}
-  <Quantity>k__BackingField: 5
+  <InventoryItem>k__BackingField: {fileID: 11400000, guid: 6016a6a4886e9b1468f53dbdd0c83aaa, type: 2}
+  <Quantity>k__BackingField: 1
   audioSource: {fileID: 2774759844743651417}
   duration: 0.3
 --- !u!82 &2774759844743651417

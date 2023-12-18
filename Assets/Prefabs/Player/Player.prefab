@@ -706,24 +706,24 @@ MonoBehaviour:
   equipedWeaponUI: {fileID: 0}
   inventoryData: {fileID: 11400000, guid: 0f2b6da123dc50b45ba6ed8db90ac4db, type: 2}
   initialItems:
-  - item: {fileID: 11400000, guid: 98523975b3f80b24b81275bd903067eb, type: 2}
-    quantity: 23
+  - item: {fileID: 0}
+    quantity: 0
     itemParameters: []
     storageType: 0
-  - item: {fileID: 11400000, guid: 98523975b3f80b24b81275bd903067eb, type: 2}
-    quantity: 31
+  - item: {fileID: 0}
+    quantity: 0
     itemParameters: []
     storageType: 0
-  - item: {fileID: 11400000, guid: 2987c6df76bec9d4c82ccc7f166efbac, type: 2}
-    quantity: 1
+  - item: {fileID: 0}
+    quantity: 0
     itemParameters: []
     storageType: 0
-  - item: {fileID: 11400000, guid: ac489cf0cec475e4a9a7d9fb91d7ca99, type: 2}
-    quantity: 1
+  - item: {fileID: 0}
+    quantity: 0
     itemParameters: []
     storageType: 0
-  - item: {fileID: 11400000, guid: ac489cf0cec475e4a9a7d9fb91d7ca99, type: 2}
-    quantity: 1
+  - item: {fileID: 0}
+    quantity: 0
     itemParameters: []
     storageType: 0
   - item: {fileID: 0}
@@ -748,7 +748,6 @@ MonoBehaviour:
     storageType: 0
   dropClip: {fileID: 0}
   audioSource: {fileID: 0}
-  itemParameterClipRemaining: {fileID: 11400000, guid: 095306fb71eee094e9b27ac30fcec610, type: 2}
 --- !u!1 &4886237443564654884
 GameObject:
   m_ObjectHideFlags: 0

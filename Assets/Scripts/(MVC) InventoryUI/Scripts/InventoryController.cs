@@ -29,6 +29,7 @@ namespace Inventory
 
         private Player player;
 
+        public event Action<InventoryUpdatedEventArgs> OnInventoryUpdated;
 
         private void Start()
         {
@@ -51,7 +52,7 @@ namespace Inventory
         private void PrepareInventoryData()
         {
             inventoryData.Initialize();
-            inventoryData.OnInventoryUpdated += HandleInventoryUpdate;
+            inventoryData.OnInventoryModelUpdate += HandleInventoryModelUpdate;
             foreach (InventoryItem item in initialItems)
             {
                 if (item.IsEmpty)
@@ -68,7 +69,7 @@ namespace Inventory
 
         private void OnDisable()
         {
-            inventoryData.OnInventoryUpdated -= HandleInventoryUpdate;
+            inventoryData.OnInventoryModelUpdate -= HandleInventoryModelUpdate;
 
             player.weaponFiredEvent.OnWeaponFired -= WeaponFiredEvent_OnWeaponFired;
 
@@ -90,19 +91,46 @@ namespace Inventory
         private void WeaponReloadedEvent_OnWeaponReloaded(WeaponReloadedEvent weaponReloadedEvent, WeaponReloadedEventArgs weaponReloadedEventArgs)
         {
             inventoryData.UpdateClipAmmo(weaponReloadedEventArgs.weapon);
+            AmmoType ammoType = weaponReloadedEventArgs.weapon.weaponDetails.weaponCurrentAmmo.ammoType;
+            int ammoToRemove = inventoryData.GetAmmoCount(ammoType) - weaponReloadedEventArgs.totalRemainingAmmo;
+            inventoryData.RemoveAmmoFromInventory(ammoType, ammoToRemove);
         }
 
-        private void HandleInventoryUpdate(bool isInventoryOnlyChanged, Dictionary<StorageType, Dictionary<int, InventoryItem>> inventoryState)
+        private void HandleInventoryModelUpdate(bool isInventoryOnlyChanged, Dictionary<StorageType, Dictionary<int, InventoryItem>> inventoryState)
         {
             // Updating weapon data
             if (isInventoryOnlyChanged != false && player != null)
             {
-                player.UpdateWeaponList(inventoryState);
+                Weapon currentWeapon = player.activeWeapon.GetCurrentWeapon();
+
+                Weapon newWeapon = new Weapon();
+
+                foreach (var item in inventoryState[StorageType.EquipedWeapon])
+                {
+                    if(currentWeapon != null)
+                    {
+                        if (item.Key == currentWeapon.weaponListPosition)
+                        {
+                            newWeapon = currentWeapon.GetWeapon(item.Value, item.Key);
+                        }
+                    }
+                    else
+                    {
+                        var equipableItem = item.Value.item as EquippableItemSO;
+
+                        if (equipableItem == null) continue;
+
+                        newWeapon = newWeapon.GetWeapon(item.Value, item.Key);
+                    }
+                }
+
+                player.setActiveWeaponEvent.CallSetActiveWeaponEvent(newWeapon);
             }
 
             UpdateInventoryUI(inventoryState);
-        }
 
+            OnInventoryUpdated?.Invoke(new InventoryUpdatedEventArgs() { inventoryState = inventoryState });
+        }
 
 
         public void ShowInventory()
@@ -259,5 +287,39 @@ namespace Inventory
         {
             return inventoryData.GetAmmoCount(ammotype);
         }
+
+        public int GetCurrentWeaponTotalAmmo()
+        {
+            var currentWeapon = player.activeWeapon.GetCurrentWeapon();
+
+            if(currentWeapon != null)
+            {
+                var currentWeaponAmmoType = currentWeapon.weaponDetails.weaponCurrentAmmo.ammoType;
+                return GetTotalAmmoByType(currentWeaponAmmoType);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public Weapon GetWeaponByIndex(int index)
+        {
+            InventoryItem inventoryItem;
+            bool isItemReturned = inventoryData.GetItemAt(StorageType.EquipedWeapon, index, out inventoryItem);
+
+            if (isItemReturned)
+            {
+                Weapon weapon = new Weapon().GetWeapon(inventoryItem, index);
+                return weapon;
+            }
+
+            return null;
+        }
+    }
+
+    public class InventoryUpdatedEventArgs : EventArgs
+    {
+        public Dictionary<StorageType, Dictionary<int, InventoryItem>> inventoryState;
     }
 }

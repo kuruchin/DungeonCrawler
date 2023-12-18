@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8568162659356646748, guid: 725f434bc3329a341b1a0c9061f1d7cc, type: 3}
+      propertyPath: chanceToDropAmmo
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: -8343591475912854618, guid: 725f434bc3329a341b1a0c9061f1d7cc, type: 3}
       propertyPath: m_Size.x
       value: 0.824733
