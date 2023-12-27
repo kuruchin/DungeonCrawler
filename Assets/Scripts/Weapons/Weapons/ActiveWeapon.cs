@@ -84,6 +84,10 @@ public class ActiveWeapon : MonoBehaviour
 
     public AmmoDetailsSO GetCurrentAmmo()
     {
+        if (currentWeapon == null) return null;
+
+        if (currentWeapon.weaponDetails == null) return null;
+
         return currentWeapon.weaponDetails.weaponCurrentAmmo;
     }
 

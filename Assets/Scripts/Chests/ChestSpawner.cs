@@ -60,14 +60,17 @@ public class ChestSpawner : MonoBehaviour
     [Tooltip("The weapons to spawn for each dungeon level and their spawn ratios")]
     #endregion Tooltip
     [SerializeField] private List<SpawnableObjectsByLevel<WeaponDetailsSO>> weaponSpawnByLevelList;
+    [SerializeField] private List<SpawnableObjectsByLevel<GameObject>> weaponItemSpawnByLevelList;
     #region Tooltip
     [Tooltip("The range of health to spawn for each level")]
     #endregion Tooltip
     [SerializeField] private List<RangeByLevel> healthSpawnByLevelList;
+    [SerializeField] private List<SpawnableObjectsByLevel<GameObject>> consumableSpawnByLevelList;
     #region Tooltip
     [Tooltip("The range of ammo to spawn for each level")]
     #endregion Tooltip
     [SerializeField] private List<RangeByLevel> ammoSpawnByLevelList;
+    [SerializeField] private List<SpawnableObjectsByLevel<GameObject>> ammoItemSpawnByLevelList;
 
     private bool chestSpawned = false;
     private Room chestRoom;
@@ -163,16 +166,11 @@ public class ChestSpawner : MonoBehaviour
         Chest chest = chestGameObject.GetComponent<Chest>();
 
         // Initialize chest
-        if (chestSpawnEvent == ChestSpawnEvent.onRoomEntry)
-        {
-            // Don't use materialize effect
-            chest.Initialize(false, GetHealthPercentToSpawn(healthNum), GetWeaponDetailsToSpawn(weaponNum), GetAmmoPercentToSpawn(ammoNum));
-        }
-        else
-        {
-            // use materialize effect
-            chest.Initialize(true, GetHealthPercentToSpawn(healthNum), GetWeaponDetailsToSpawn(weaponNum), GetAmmoPercentToSpawn(ammoNum));
-        }
+        // true/false - don't use materialize effect one chest on room entry
+        chest.Initialize(chestSpawnEvent == ChestSpawnEvent.onRoomEntry ? false : true,
+                          GetConsumableItemPrefabToSpawn(healthNum),
+                          GetWeaponItemPrefabToSpawn(weaponNum),
+                          GetAmmoItemPrefabToSpawn(ammoNum));
     }
 
     /// <summary>
@@ -249,16 +247,31 @@ public class ChestSpawner : MonoBehaviour
     {
         if (ammoNumber == 0) return 0;
 
+        var currentDungeonLevel = GameManager.Instance.GetCurrentDungeonLevel();
+
         // Get ammo spawn percent range for level
         foreach (RangeByLevel spawnPercentByLevel in ammoSpawnByLevelList)
         {
-            if (spawnPercentByLevel.dungeonLevel == GameManager.Instance.GetCurrentDungeonLevel())
+            if (spawnPercentByLevel.dungeonLevel == currentDungeonLevel)
             {
                 return Random.Range(spawnPercentByLevel.min, spawnPercentByLevel.max);
             }
         }
 
         return 0;
+    }
+
+    private GameObject GetAmmoItemPrefabToSpawn(int ammoNumber)
+    {
+        if (ammoNumber == 0) return null;
+
+        // Create an instance of the class used to select a random item from a list based on the
+        // relative 'ratios' of the items specified
+        RandomSpawnableObject<GameObject> ammoRandom = new RandomSpawnableObject<GameObject>(ammoItemSpawnByLevelList);
+
+        GameObject ammoItem = ammoRandom.GetItem();
+
+        return ammoItem;
     }
 
     /// <summary>
@@ -280,18 +293,31 @@ public class ChestSpawner : MonoBehaviour
         return 0;
     }
 
+    private GameObject GetConsumableItemPrefabToSpawn(int healthNumber)
+    {
+        if (healthNumber == 0) return null;
+
+        // Create an instance of the class used to select a random item from a list based on the
+        // relative 'ratios' of the items specified
+        RandomSpawnableObject<GameObject> consumableRandom = new RandomSpawnableObject<GameObject>(consumableSpawnByLevelList);
+
+        GameObject consumableItem = consumableRandom.GetItem();
+
+        return consumableItem;
+    }
+
     /// <summary>
     /// Get the weapon details to spawn - return null if no weapon is to be spawned or the player already has the weapon
     /// </summary>
-    private WeaponDetailsSO GetWeaponDetailsToSpawn(int weaponNumber)
+    private GameObject GetWeaponItemPrefabToSpawn(int weaponNumber)
     {
         if (weaponNumber == 0) return null;
 
         // Create an instance of the class used to select a random item from a list based on the
         // relative 'ratios' of the items specified
-        RandomSpawnableObject<WeaponDetailsSO> weaponRandom = new RandomSpawnableObject<WeaponDetailsSO>(weaponSpawnByLevelList);
+        RandomSpawnableObject<GameObject> weaponRandom = new RandomSpawnableObject<GameObject>(weaponItemSpawnByLevelList);
 
-        WeaponDetailsSO weaponDetails = weaponRandom.GetItem();
+        GameObject weaponDetails = weaponRandom.GetItem();
 
         return weaponDetails;
     }
@@ -302,57 +328,57 @@ public class ChestSpawner : MonoBehaviour
     // Validate prefab details enetered
     private void OnValidate()
     {
-        HelperUtilities.ValidateCheckNullValue(this, nameof(chestPrefab), chestPrefab);
-        HelperUtilities.ValidateCheckPositiveRange(this, nameof(chestSpawnChanceMin), chestSpawnChanceMin, nameof(chestSpawnChanceMax), chestSpawnChanceMax, true);
+        //HelperUtilities.ValidateCheckNullValue(this, nameof(chestPrefab), chestPrefab);
+        //HelperUtilities.ValidateCheckPositiveRange(this, nameof(chestSpawnChanceMin), chestSpawnChanceMin, nameof(chestSpawnChanceMax), chestSpawnChanceMax, true);
 
-        if (chestSpawnChanceByLevelList != null && chestSpawnChanceByLevelList.Count > 0)
-        {
-            HelperUtilities.ValidateCheckEnumerableValues(this, nameof(chestSpawnChanceByLevelList), chestSpawnChanceByLevelList);
+        //if (chestSpawnChanceByLevelList != null && chestSpawnChanceByLevelList.Count > 0)
+        //{
+        //    HelperUtilities.ValidateCheckEnumerableValues(this, nameof(chestSpawnChanceByLevelList), chestSpawnChanceByLevelList);
 
-            foreach (RangeByLevel rangeByLevel in chestSpawnChanceByLevelList)
-            {
-                HelperUtilities.ValidateCheckNullValue(this, nameof(rangeByLevel.dungeonLevel), rangeByLevel.dungeonLevel);
-                HelperUtilities.ValidateCheckPositiveRange(this, nameof(rangeByLevel.min), rangeByLevel.min, nameof(rangeByLevel.max), rangeByLevel.max, true);
-            }
-        }
+        //    foreach (RangeByLevel rangeByLevel in chestSpawnChanceByLevelList)
+        //    {
+        //        HelperUtilities.ValidateCheckNullValue(this, nameof(rangeByLevel.dungeonLevel), rangeByLevel.dungeonLevel);
+        //        HelperUtilities.ValidateCheckPositiveRange(this, nameof(rangeByLevel.min), rangeByLevel.min, nameof(rangeByLevel.max), rangeByLevel.max, true);
+        //    }
+        //}
 
-        HelperUtilities.ValidateCheckPositiveRange(this, nameof(numberOfItemsToSpawnMin), numberOfItemsToSpawnMin, nameof(numberOfItemsToSpawnMax), numberOfItemsToSpawnMax, true);
+        //HelperUtilities.ValidateCheckPositiveRange(this, nameof(numberOfItemsToSpawnMin), numberOfItemsToSpawnMin, nameof(numberOfItemsToSpawnMax), numberOfItemsToSpawnMax, true);
 
-        if (weaponSpawnByLevelList != null && weaponSpawnByLevelList.Count > 0)
-        {
-            foreach (SpawnableObjectsByLevel<WeaponDetailsSO> weaponDetailsByLevel in weaponSpawnByLevelList)
-            {
-                HelperUtilities.ValidateCheckNullValue(this, nameof(weaponDetailsByLevel.dungeonLevel), weaponDetailsByLevel.dungeonLevel);
+        //if (weaponSpawnByLevelList != null && weaponSpawnByLevelList.Count > 0)
+        //{
+        //    foreach (SpawnableObjectsByLevel<WeaponDetailsSO> weaponDetailsByLevel in weaponSpawnByLevelList)
+        //    {
+        //        HelperUtilities.ValidateCheckNullValue(this, nameof(weaponDetailsByLevel.dungeonLevel), weaponDetailsByLevel.dungeonLevel);
 
-                foreach (SpawnableObjectRatio<WeaponDetailsSO> weaponRatio in weaponDetailsByLevel.spawnableObjectRatioList)
-                {
-                    HelperUtilities.ValidateCheckNullValue(this, nameof(weaponRatio.dungeonObject), weaponRatio.dungeonObject);
+        //        foreach (SpawnableObjectRatio<WeaponDetailsSO> weaponRatio in weaponDetailsByLevel.spawnableObjectRatioList)
+        //        {
+        //            HelperUtilities.ValidateCheckNullValue(this, nameof(weaponRatio.dungeonObject), weaponRatio.dungeonObject);
 
-                    HelperUtilities.ValidateCheckPositiveValue(this, nameof(weaponRatio.ratio), weaponRatio.ratio, true);
-                }
-            }
-        }
+        //            HelperUtilities.ValidateCheckPositiveValue(this, nameof(weaponRatio.ratio), weaponRatio.ratio, true);
+        //        }
+        //    }
+        //}
 
-        if (healthSpawnByLevelList != null && healthSpawnByLevelList.Count > 0)
-        {
-            HelperUtilities.ValidateCheckEnumerableValues(this, nameof(healthSpawnByLevelList), healthSpawnByLevelList);
+        //if (healthSpawnByLevelList != null && healthSpawnByLevelList.Count > 0)
+        //{
+        //    HelperUtilities.ValidateCheckEnumerableValues(this, nameof(healthSpawnByLevelList), healthSpawnByLevelList);
 
-            foreach (RangeByLevel rangeByLevel in healthSpawnByLevelList)
-            {
-                HelperUtilities.ValidateCheckNullValue(this, nameof(rangeByLevel.dungeonLevel), rangeByLevel.dungeonLevel);
-                HelperUtilities.ValidateCheckPositiveRange(this, nameof(rangeByLevel.min), rangeByLevel.min, nameof(rangeByLevel.max), rangeByLevel.max, true);
-            }
-        }
+        //    foreach (RangeByLevel rangeByLevel in healthSpawnByLevelList)
+        //    {
+        //        HelperUtilities.ValidateCheckNullValue(this, nameof(rangeByLevel.dungeonLevel), rangeByLevel.dungeonLevel);
+        //        HelperUtilities.ValidateCheckPositiveRange(this, nameof(rangeByLevel.min), rangeByLevel.min, nameof(rangeByLevel.max), rangeByLevel.max, true);
+        //    }
+        //}
 
-        if (ammoSpawnByLevelList != null && ammoSpawnByLevelList.Count > 0)
-        {
-            HelperUtilities.ValidateCheckEnumerableValues(this, nameof(ammoSpawnByLevelList), ammoSpawnByLevelList);
-            foreach (RangeByLevel rangeByLevel in ammoSpawnByLevelList)
-            {
-                HelperUtilities.ValidateCheckNullValue(this, nameof(rangeByLevel.dungeonLevel), rangeByLevel.dungeonLevel);
-                HelperUtilities.ValidateCheckPositiveRange(this, nameof(rangeByLevel.min), rangeByLevel.min, nameof(rangeByLevel.max), rangeByLevel.max, true);
-            }
-        }
+        //if (ammoSpawnByLevelList != null && ammoSpawnByLevelList.Count > 0)
+        //{
+        //    HelperUtilities.ValidateCheckEnumerableValues(this, nameof(ammoSpawnByLevelList), ammoSpawnByLevelList);
+        //    foreach (RangeByLevel rangeByLevel in ammoSpawnByLevelList)
+        //    {
+        //        HelperUtilities.ValidateCheckNullValue(this, nameof(rangeByLevel.dungeonLevel), rangeByLevel.dungeonLevel);
+        //        HelperUtilities.ValidateCheckPositiveRange(this, nameof(rangeByLevel.min), rangeByLevel.min, nameof(rangeByLevel.max), rangeByLevel.max, true);
+        //    }
+        //}
 
     }
 

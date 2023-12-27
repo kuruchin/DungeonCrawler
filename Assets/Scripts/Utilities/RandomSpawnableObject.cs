@@ -44,7 +44,8 @@ public class RandomSpawnableObject<T>
                     ratioValueTotal += spawnableObjectRatio.ratio;
 
                     // Add spawnable object to list;
-                    chanceBoundariesList.Add(new chanceBoundaries() { spawnableObject = spawnableObjectRatio.dungeonObject, lowBoundaryValue = lowerBoundary, highBoundaryValue = upperBoundary });
+                    chanceBoundariesList.Add(new chanceBoundaries() { spawnableObject = 
+                        spawnableObjectRatio.dungeonObject, lowBoundaryValue = lowerBoundary, highBoundaryValue = upperBoundary });
 
                 }
             }

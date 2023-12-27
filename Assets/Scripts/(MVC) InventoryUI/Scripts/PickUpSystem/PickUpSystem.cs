@@ -19,7 +19,7 @@ public class PickUpSystem : MonoBehaviour
     private void Update()
     {
         // Process player use item input
-        UseItemInput();
+        //UseItemInput();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

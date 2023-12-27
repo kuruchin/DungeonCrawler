@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoName: GM6 Lynx Ammo
   isPlayerAmmo: 1
-  ammoType: 0
+  ammoType: 3
   ammoSprite: {fileID: 21300000, guid: c3be09077243891458bdbf46a57d2e8a, type: 3}
   ammoPrefabArray:
   - {fileID: 3704831762367981905, guid: 36132d4582359b248bcff7a3d1f13bad, type: 3}

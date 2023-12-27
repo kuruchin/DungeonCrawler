@@ -164,7 +164,7 @@ public class GameResources : MonoBehaviour
 
     #region Header CHESTS
     [Space(10)]
-    [Header("CHESTS")]
+    [Header("ITEMS")]
     #endregion
     #region Tooltip
     [Tooltip("Chest item prefab")]
@@ -178,6 +178,10 @@ public class GameResources : MonoBehaviour
     [Tooltip("Populate with bullet icon sprite")]
     #endregion
     public Sprite bulletIcon;
+    #region Tooltip
+    [Tooltip("Table of dropped items")]
+    #endregion
+    public DroppedItemsTableSO droppedItemsTableSO;
 
     #region Header MINIMAP
     [Space(10)]

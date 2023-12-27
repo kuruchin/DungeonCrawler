@@ -25,5 +25,10 @@ namespace Inventory.Model
             }
             return false;
         }
+
+        public override void ActionOnPickup(Item item)
+        {
+            GameManager.Instance.GetPlayer().GetComponent<InventoryController>().PickUpItem(item);
+        }
     }
 }

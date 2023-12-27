@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa7ac42782dc2648909143f4cbcc2b4, type: 3}
   m_Name: DroppedItemsTableSO
   m_EditorClassIdentifier: 
-  ammoItems: []
+  ammoItems:
+  - {fileID: 4666032408906198398, guid: 9fc2a12cad4b97f4d8a71bc0f427b0d3, type: 3}
+  - {fileID: 2924399035376809017, guid: 15c4212b6c14e414a861350e4ad1d315, type: 3}
+  - {fileID: 1929041346821607156, guid: a75e21b3fc073954ab35d9ca643df60b, type: 3}

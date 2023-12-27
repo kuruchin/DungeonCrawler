@@ -10,5 +10,10 @@ namespace Inventory.Model
     {
         [field: SerializeField]
         public AmmoType ammoType;
+
+        public override void ActionOnPickup(Item item)
+        {
+            GameManager.Instance.GetPlayer().GetComponent<InventoryController>().PickUpItem(item);
+        }
     }
 }

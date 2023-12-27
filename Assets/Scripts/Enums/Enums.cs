@@ -57,13 +57,15 @@ public enum ItemParameterType
 {
     None,
     ClipAmmoRemaining,
+    HealthPointsRecovery,
+    CurrentWeaponAmmoRecovery,
     AmmoCapacity
 }
 
 public enum AmmoType
 {
     None,
-    FirstType,
-    SecondType,
-    ThirdType
+    LightType,
+    HeavyType,
+    EnergyType
 }

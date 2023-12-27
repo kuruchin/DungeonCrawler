@@ -316,6 +316,23 @@ namespace Inventory
 
             return null;
         }
+
+        public void PickUpItem(Item item)
+        {
+            // TODO: equip weapon first
+            if (item != null)
+            {
+                // Play pickup sound effect
+                SoundEffectManager.Instance.PlaySoundEffect(item.soundEffect);
+
+                // TODO: equip weapon first
+                int reminder = inventoryData.AddItem(StorageType.Inventory, item.InventoryItem, item.Quantity);
+                if (reminder == 0)
+                    item.DestroyItem();
+                else
+                    item.Quantity = reminder;
+            }
+        }
     }
 
     public class InventoryUpdatedEventArgs : EventArgs

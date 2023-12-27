@@ -28,6 +28,7 @@ namespace Inventory.Model
         [field: SerializeField]
         public List<ItemParameter> DefaultParametersList { get; set; }
 
+        public abstract void ActionOnPickup(Item item);
     }
 
     [Serializable]

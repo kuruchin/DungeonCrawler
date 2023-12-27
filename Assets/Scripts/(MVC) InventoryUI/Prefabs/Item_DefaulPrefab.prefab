@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 1348897235664492448}
   - component: {fileID: 2774759844743651417}
   m_Layer: 0
-  m_Name: Item_ammo2
+  m_Name: Item_DefaulPrefab
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -72,18 +72,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 2002717741
-  m_SortingLayer: 2
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_SortingLayerID: -653709415
+  m_SortingLayer: 4
+  m_SortingOrder: 1
+  m_Sprite: {fileID: -5281422124547630143, guid: beeb19d9abdca5b4fae733163f7ad375, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.28, y: 1.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!58 &7753788797826966099
@@ -114,9 +114,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f61dfe657cf444bab13f9ded752deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <InventoryItem>k__BackingField: {fileID: 11400000, guid: 003e8cc81cb8ad644bdc9cd8118e1b8e, type: 2}
+  <InventoryItem>k__BackingField: {fileID: 0}
   <Quantity>k__BackingField: 5
   audioSource: {fileID: 2774759844743651417}
+  soundEffect: {fileID: 11400000, guid: 5fffce0349204ef41bcd7741f1d5806a, type: 2}
   duration: 0.3
 --- !u!82 &2774759844743651417
 AudioSource:

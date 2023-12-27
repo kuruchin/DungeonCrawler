@@ -90,7 +90,7 @@ public class PlayerControl : MonoBehaviour
         WeaponInput();
 
         // Process player use item input
-        UseItemInput();
+        PickUpItemInput();
 
         // Player roll cooldown timer
         PlayerRollCooldownTimer();
@@ -395,9 +395,9 @@ public class PlayerControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Use the nearest item within 2 unity units from the player
+    /// Pick up the nearest item within 2 unity units from the player
     /// </summary>
-    private void UseItemInput()
+    private void PickUpItemInput()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -409,11 +409,18 @@ public class PlayerControl : MonoBehaviour
             // Loop through detected items to see if any are 'useable'
             foreach (Collider2D collider2D in collider2DArray)
             {
-                IUseable iUseable = collider2D.GetComponent<IUseable>();
+                IPickable iPickable = collider2D.GetComponent<IPickable>();
 
-                if (iUseable != null)
+                if (iPickable != null)
                 {
-                    iUseable.UseItem();
+                    // Need to check if item can be picked up. This may not be possible if it is in the chest
+                    if (iPickable.CanBePickedUp())
+                    {
+                        iPickable.PickUpItem();
+
+                        // Stop foreach after successed picking item
+                        break;
+                    }
                 }
             }
         }

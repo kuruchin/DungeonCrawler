@@ -1,11 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using Inventory.Model;
+using Inventory;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(MaterializeEffect))]
-public class Chest : MonoBehaviour, IUseable
+public class Chest : MonoBehaviour, IPickable
 {
     #region Tooltip
     [Tooltip("Set this to the colour to be used for the materialization effect")]
@@ -20,17 +22,41 @@ public class Chest : MonoBehaviour, IUseable
     [Tooltip("Populate withItemSpawnPoint transform")]
     #endregion Tooltip
     [SerializeField] private Transform itemSpawnPoint;
-    private int healthPercent;
-    private WeaponDetailsSO weaponDetails;
-    private int ammoPercent;
+    //private int healthPercent;
+
+    private GameObject weaponItemGameobject;
+    private Item weaponItem;
+
+    private GameObject ammoItemGameobject;
+    private Item ammoItem;
+
+    private GameObject healthItemGameobject;
+    private Item healthItem;
+
+    //private int ammoPercent;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private MaterializeEffect materializeEffect;
     private bool isEnabled = false;
     private ChestState chestState = ChestState.closed;
-    private GameObject chestItemGameObject;
-    private ChestItem chestItem;
+    //private GameObject chestItemGameObject;
+
+    //private ChestItem chestItem;
+
     private TextMeshPro messageTextTMP;
+
+
+    private bool canBePickedUp = true;
+
+    public bool CanBePickedUp()
+    {
+        return canBePickedUp;
+    }
+
+    public void SetCanBePickedUp(bool value)
+    {
+        canBePickedUp = value;
+    }
 
     private void Awake()
     {
@@ -44,11 +70,35 @@ public class Chest : MonoBehaviour, IUseable
     /// <summary>
     /// Initialize Chest and either make it visible immediately or materialize it
     /// </summary>
-    public void Initialize(bool shouldMaterialize, int healthPercent, WeaponDetailsSO weaponDetails, int ammoPercent)
+    public void Initialize(bool shouldMaterialize, GameObject healthItemPrefab, GameObject weaponItemPrefab, GameObject ammoItemPrefab)
     {
-        this.healthPercent = healthPercent;
-        this.weaponDetails = weaponDetails;
-        this.ammoPercent = ammoPercent;
+        if (healthItemPrefab != null)
+        {
+            healthItemGameobject = Instantiate(healthItemPrefab, itemSpawnPoint.position, Quaternion.identity, this.transform);
+
+            healthItem = healthItemGameobject.GetComponent<Item>();
+            healthItem.SetCanBePickedUp(false);
+            healthItemGameobject.SetActive(false);
+        }
+
+        if (ammoItemPrefab != null)
+        {
+            ammoItemGameobject = Instantiate(ammoItemPrefab, itemSpawnPoint.position, Quaternion.identity, this.transform);
+
+            ammoItem = ammoItemGameobject.GetComponent<Item>();
+            ammoItem.SetCanBePickedUp(false);
+            ammoItemGameobject.SetActive(false);
+        }
+
+        if (weaponItemPrefab != null)
+        {
+            weaponItemGameobject = Instantiate(weaponItemPrefab, itemSpawnPoint.position,Quaternion.identity, this.transform);
+
+            weaponItem = weaponItemGameobject.GetComponent<Item>();
+            weaponItem.SetCanBePickedUp(false);
+            weaponItemGameobject.SetActive(false);
+        }
+
 
         if (shouldMaterialize)
         {
@@ -84,7 +134,7 @@ public class Chest : MonoBehaviour, IUseable
     /// <summary>
     /// Use the chest - action will vary depending on the chest state
     /// </summary>
-    public void UseItem()
+    public void PickUpItem()
     {
         if (!isEnabled) return;
 
@@ -124,13 +174,6 @@ public class Chest : MonoBehaviour, IUseable
         // chest open sound effect
         SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.chestOpen);
 
-        // Check if player alreay has the weapon - if so set weapon to null
-        if (weaponDetails != null)
-        {
-            if (GameManager.Instance.GetPlayer().IsWeaponHeldByPlayer(weaponDetails))
-                weaponDetails = null;
-        }
-
         UpdateChestState();
     }
 
@@ -139,20 +182,20 @@ public class Chest : MonoBehaviour, IUseable
     /// </summary>
     private void UpdateChestState()
     {
-        if (healthPercent != 0)
+        if (healthItem != null)
         {
             chestState = ChestState.healthItem;
-            InstantiateHealthItem();
+            healthItemGameobject.SetActive(true);
         }
-        else if (ammoPercent != 0)
+        else if (ammoItem != null)
         {
             chestState = ChestState.ammoItem;
-            InstantiateAmmoItem();
+            ammoItemGameobject.SetActive(true);
         }
-        else if (weaponDetails != null)
+        else if (weaponItem != null)
         {
             chestState = ChestState.weaponItem;
-            InstantiateWeaponItem();
+            weaponItemGameobject.SetActive(true);
         }
         else
         {
@@ -161,89 +204,63 @@ public class Chest : MonoBehaviour, IUseable
     }
 
     /// <summary>
-    /// Instantiate a chest item
-    /// </summary>
-    private void InstantiateItem()
-    {
-        chestItemGameObject = Instantiate(GameResources.Instance.chestItemPrefab, this.transform);
-
-        chestItem = chestItemGameObject.GetComponent<ChestItem>();
-    }
-
-    /// <summary>
-    /// Instantiate a health item for the player to collect
-    /// </summary>
-    private void InstantiateHealthItem()
-    {
-        InstantiateItem();
-
-        chestItem.Initialize(GameResources.Instance.heartIcon, healthPercent.ToString() + "%", itemSpawnPoint.position, materializeColor);
-    }
-
-
-    /// <summary>
     /// Collect the health item and add it to the players health
     /// </summary>
     private void CollectHealthItem()
     {
-        // Check item exists and has been materialized
-        if (chestItem == null || !chestItem.isItemMaterialized) return;
+        if (healthItem != null)
+        {
+            healthItem.InventoryItem.ActionOnPickup(healthItem);
+        }
 
-        // Add health to player
-        GameManager.Instance.GetPlayer().health.AddHealth(healthPercent);
+        if (healthItem == null)
+        {
+            UpdateChestState();
+        }
 
-        // Play pickup sound effect
-        SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.healthPickup);
+        //// Add health to player
+        //GameManager.Instance.GetPlayer().health.AddHealth(healthPercent);
 
-        healthPercent = 0;
+        //// Play pickup sound effect
+        //SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.healthPickup);
 
-        Destroy(chestItemGameObject);
+        //healthPercent = 0;
 
-        UpdateChestState();
+        //Destroy(chestItemGameObject);
+
+        //UpdateChestState();
     }
-
-    /// <summary>
-    /// Instantiate a ammo item for the player to collect
-    /// </summary>
-    private void InstantiateAmmoItem()
-    {
-        InstantiateItem();
-
-        chestItem.Initialize(GameResources.Instance.bulletIcon, ammoPercent.ToString() + "%", itemSpawnPoint.position, materializeColor);
-    }
-
 
     /// <summary>
     /// Collect an ammo item and add it to the ammo in the players current weapon
     /// </summary>
     private void CollectAmmoItem()
     {
-        // Check item exists and has been materialized
-        if (chestItem == null || !chestItem.isItemMaterialized) return;
+        if (ammoItem != null)
+        {
+            ammoItem.InventoryItem.ActionOnPickup(ammoItem);
+        }
 
-        Player player = GameManager.Instance.GetPlayer();
+        if (ammoItem == null)
+        {
+            UpdateChestState();
+        }
+        //// Check item exists and has been materialized
+        //if (chestItem == null || !chestItem.isItemMaterialized) return;
 
-        // Update ammo for current weapon
-        player.reloadWeaponEvent.CallReloadWeaponEvent(player.activeWeapon.GetCurrentWeapon(), ammoPercent);
+        //Player player = GameManager.Instance.GetPlayer();
 
-        // Play pickup sound effect
-        SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.ammoPickup);
+        //// Update ammo for current weapon
+        //player.reloadWeaponEvent.CallReloadWeaponEvent(player.activeWeapon.GetCurrentWeapon(), ammoPercent);
 
-        ammoPercent = 0;
+        //// Play pickup sound effect
+        //SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.ammoPickup);
 
-        Destroy(chestItemGameObject);
+        //ammoPercent = 0;
 
-        UpdateChestState();
-    }
+        //Destroy(chestItemGameObject);
 
-    /// <summary>
-    /// Instantiate a weapon item for the player to collect
-    /// </summary>
-    private void InstantiateWeaponItem()
-    {
-        InstantiateItem();
-
-        chestItemGameObject.GetComponent<ChestItem>().Initialize(weaponDetails.weaponSprite, weaponDetails.weaponName, itemSpawnPoint.position, materializeColor);
+        //UpdateChestState();
     }
 
     /// <summary>
@@ -251,30 +268,15 @@ public class Chest : MonoBehaviour, IUseable
     /// </summary>
     private void CollectWeaponItem()
     {
-        // Check item exists and has been materialized
-        if (chestItem == null || !chestItem.isItemMaterialized) return;
-
-        // If the player doesn't already have the weapon, then add to player
-        if (!GameManager.Instance.GetPlayer().IsWeaponHeldByPlayer(weaponDetails))
+        if (weaponItem != null)
         {
-            // Add weapon to player
-            GameManager.Instance.GetPlayer().AddWeaponToPlayer(weaponDetails);
-
-            // Play pickup sound effect
-            SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.weaponPickup);
+            weaponItem.InventoryItem.ActionOnPickup(weaponItem);
         }
 
-        else
+        if (weaponItem == null)
         {
-            // display message saying you already have the weapon
-            StartCoroutine(DisplayMessage("WEAPON\nALREADY\nEQUIPPED", 5f));
-
+            UpdateChestState();
         }
-        weaponDetails = null;
-
-        Destroy(chestItemGameObject);
-
-        UpdateChestState();
     }
 
     /// <summary>

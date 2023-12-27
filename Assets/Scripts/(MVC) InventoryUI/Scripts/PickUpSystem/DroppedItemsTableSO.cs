@@ -1,3 +1,4 @@
+using Inventory.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,5 +18,24 @@ public class DroppedItemsTableSO : ScriptableObject
 
         int randomIndex = Random.Range(0, ammoItems.Length);
         return ammoItems[randomIndex];
+    }
+
+    public GameObject GetAmmoItemByType(AmmoType ammoType)
+    {
+        foreach (var item in ammoItems)
+        {
+            var ammoItem = item.GetComponent<Item>();
+
+            if(ammoItem != null)
+            {
+                var ammoItemType = (ammoItem.InventoryItem as AmmoItemSO).ammoType;
+
+                if (ammoType == ammoItemType)
+                {
+                    return item;
+                }
+            }
+        }
+        return null;
     }
 }

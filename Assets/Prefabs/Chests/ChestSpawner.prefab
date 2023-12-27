@@ -82,6 +82,15 @@ MonoBehaviour:
     spawnableObjectRatioList: []
   - dungeonLevel: {fileID: 11400000, guid: 2a55dcbad3bc6f342a3564b4e9622784, type: 2}
     spawnableObjectRatioList: []
+  weaponItemSpawnByLevelList:
+  - dungeonLevel: {fileID: 11400000, guid: b8758f957f5d71840adad21f9bd3d838, type: 2}
+    spawnableObjectRatioList:
+    - dungeonObject: {fileID: 7668597303556348692, guid: ca4c89d2a98203b40878b18ef83b57ad, type: 3}
+      ratio: 1
+    - dungeonObject: {fileID: 7668597303556348692, guid: d9a1b99eac514944cb0bb5f6dffabef5, type: 3}
+      ratio: 1
+    - dungeonObject: {fileID: 7668597303556348692, guid: 6ad9d2b466938f844b1802afddc50f66, type: 3}
+      ratio: 1
   healthSpawnByLevelList:
   - dungeonLevel: {fileID: 11400000, guid: b8758f957f5d71840adad21f9bd3d838, type: 2}
     min: 30
@@ -101,6 +110,11 @@ MonoBehaviour:
   - dungeonLevel: {fileID: 11400000, guid: 2a55dcbad3bc6f342a3564b4e9622784, type: 2}
     min: 60
     max: 80
+  consumableSpawnByLevelList:
+  - dungeonLevel: {fileID: 11400000, guid: b8758f957f5d71840adad21f9bd3d838, type: 2}
+    spawnableObjectRatioList:
+    - dungeonObject: {fileID: 4562613961668345929, guid: 9624a25a0558a2e42bb8f691ef0be9ae, type: 3}
+      ratio: 1
   ammoSpawnByLevelList:
   - dungeonLevel: {fileID: 11400000, guid: b8758f957f5d71840adad21f9bd3d838, type: 2}
     min: 30
@@ -120,3 +134,12 @@ MonoBehaviour:
   - dungeonLevel: {fileID: 11400000, guid: 2a55dcbad3bc6f342a3564b4e9622784, type: 2}
     min: 60
     max: 80
+  ammoItemSpawnByLevelList:
+  - dungeonLevel: {fileID: 11400000, guid: b8758f957f5d71840adad21f9bd3d838, type: 2}
+    spawnableObjectRatioList:
+    - dungeonObject: {fileID: 4666032408906198398, guid: 9fc2a12cad4b97f4d8a71bc0f427b0d3, type: 3}
+      ratio: 1
+    - dungeonObject: {fileID: 2924399035376809017, guid: 15c4212b6c14e414a861350e4ad1d315, type: 3}
+      ratio: 1
+    - dungeonObject: {fileID: 1929041346821607156, guid: a75e21b3fc073954ab35d9ca643df60b, type: 3}
+      ratio: 1

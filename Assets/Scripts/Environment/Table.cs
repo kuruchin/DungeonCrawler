@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Table : MonoBehaviour, IUseable
+public class Table : MonoBehaviour, IPickable
 {
     #region Tooltip
     [Tooltip("The mass of the table to control the speed that it moves when pushed")]
@@ -13,6 +13,17 @@ public class Table : MonoBehaviour, IUseable
     private Animator animator;
     private Rigidbody2D rigidBody2D;
     private bool itemUsed = false;
+    private bool canBePickedUp = true;
+
+    public bool CanBePickedUp()
+    {
+        return canBePickedUp;
+    }
+
+    public void SetCanBePickedUp(bool value)
+    {
+        canBePickedUp = value;
+    }
 
     private void Awake()
     {
@@ -21,7 +32,7 @@ public class Table : MonoBehaviour, IUseable
         rigidBody2D = GetComponent<Rigidbody2D>();
     }
 
-    public void UseItem()
+    public void PickUpItem()
     {
         if (!itemUsed)
         {

@@ -16,6 +16,11 @@ namespace Inventory.Model
         [field: SerializeField]
         public AudioClip actionSFX {get; private set;}
 
+        public override void ActionOnPickup(Item item)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool PerformAction(GameObject character, List<ItemParameter> itemState = null)
         {
             foreach (ModifierData data in modifiersData)

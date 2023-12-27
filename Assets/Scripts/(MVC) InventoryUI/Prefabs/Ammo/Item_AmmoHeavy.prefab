@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5538123779686959372
+--- !u!1001 &1018525792838952481
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -8,16 +8,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1348897235664492448, guid: 41762b5013df124489855c13f17e2b69, type: 3}
-      propertyPath: <Quantity>k__BackingField
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1348897235664492448, guid: 41762b5013df124489855c13f17e2b69, type: 3}
       propertyPath: <InventoryItem>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: ac489cf0cec475e4a9a7d9fb91d7ca99, type: 2}
+      objectReference: {fileID: 11400000, guid: 003e8cc81cb8ad644bdc9cd8118e1b8e, type: 2}
+    - target: {fileID: 2789710186583691800, guid: 41762b5013df124489855c13f17e2b69, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
     - target: {fileID: 2789710186583691800, guid: 41762b5013df124489855c13f17e2b69, type: 3}
       propertyPath: m_Name
-      value: Item_GM6 Lynx Sniper
+      value: Item_AmmoHeavy
       objectReference: {fileID: 0}
     - target: {fileID: 9172199622735599547, guid: 41762b5013df124489855c13f17e2b69, type: 3}
       propertyPath: m_RootOrder

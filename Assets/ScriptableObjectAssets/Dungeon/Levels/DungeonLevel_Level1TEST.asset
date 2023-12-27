@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 574055aba7953414f879974262b78e0c, type: 3}
-  m_Name: test_level
+  m_Name: DungeonLevel_Level1TEST
   m_EditorClassIdentifier: 
   levelName: The Hall Of Heroes
   roomTemplateList:
-  - {fileID: 11400000, guid: eb78b86b8a0589f44a91ff8b40a0d0f9, type: 2}
+  - {fileID: 11400000, guid: 3cdc996eae718644dad8dad24ae2c39f, type: 2}
   - {fileID: 11400000, guid: 17aab39e60e31b44cbb99c260366f725, type: 2}
   - {fileID: 11400000, guid: 75e9ed4d33bf76c439c799075b936c76, type: 2}
   - {fileID: 11400000, guid: 58168ebb0df392f41b061a0c6b25da05, type: 2}
