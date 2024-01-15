@@ -9,131 +9,73 @@ using Inventory;
 [RequireComponent(typeof(MaterializeEffect))]
 public class Chest : MonoBehaviour, IPickable
 {
-    #region Tooltip
-    [Tooltip("Set this to the colour to be used for the materialization effect")]
-    #endregion Tooltip
+    [Tooltip("Color for the materialization effect")]
     [ColorUsage(false, true)]
     [SerializeField] private Color materializeColor;
-    #region Tooltip
-    [Tooltip("Set this to the time is will take to materialize the chest")]
-    #endregion Tooltip
+
+    [Tooltip("Time it takes to materialize the chest")]
     [SerializeField] private float materializeTime = 3f;
-    #region Tooltip
-    [Tooltip("Populate withItemSpawnPoint transform")]
-    #endregion Tooltip
+
+    [Tooltip("Transform to populate with item spawn point")]
     [SerializeField] private Transform itemSpawnPoint;
-    //private int healthPercent;
 
-    private GameObject weaponItemGameobject;
-    private Item weaponItem;
+    private GameObject weaponItemGameObject, ammoItemGameObject, healthItemGameObject;
+    private Item weaponItem, ammoItem, healthItem;
 
-    private GameObject ammoItemGameobject;
-    private Item ammoItem;
-
-    private GameObject healthItemGameobject;
-    private Item healthItem;
-
-    //private int ammoPercent;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private MaterializeEffect materializeEffect;
     private bool isEnabled = false;
     private ChestState chestState = ChestState.closed;
-    //private GameObject chestItemGameObject;
-
-    //private ChestItem chestItem;
-
     private TextMeshPro messageTextTMP;
-
 
     private bool canBePickedUp = true;
 
-    public bool CanBePickedUp()
-    {
-        return canBePickedUp;
-    }
+    public bool CanBePickedUp() => canBePickedUp;
 
-    public void SetCanBePickedUp(bool value)
-    {
-        canBePickedUp = value;
-    }
+    public void SetCanBePickedUp(bool value) => canBePickedUp = value;
 
     private void Awake()
     {
-        //  Cache components
+        // Cache components
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         materializeEffect = GetComponent<MaterializeEffect>();
         messageTextTMP = GetComponentInChildren<TextMeshPro>();
     }
 
-    /// <summary>
-    /// Initialize Chest and either make it visible immediately or materialize it
-    /// </summary>
     public void Initialize(bool shouldMaterialize, GameObject healthItemPrefab, GameObject weaponItemPrefab, GameObject ammoItemPrefab)
     {
-        if (healthItemPrefab != null)
-        {
-            healthItemGameobject = Instantiate(healthItemPrefab, itemSpawnPoint.position, Quaternion.identity, this.transform);
-
-            healthItem = healthItemGameobject.GetComponent<Item>();
-            healthItem.SetCanBePickedUp(false);
-            healthItemGameobject.SetActive(false);
-        }
-
-        if (ammoItemPrefab != null)
-        {
-            ammoItemGameobject = Instantiate(ammoItemPrefab, itemSpawnPoint.position, Quaternion.identity, this.transform);
-
-            ammoItem = ammoItemGameobject.GetComponent<Item>();
-            ammoItem.SetCanBePickedUp(false);
-            ammoItemGameobject.SetActive(false);
-        }
-
-        if (weaponItemPrefab != null)
-        {
-            weaponItemGameobject = Instantiate(weaponItemPrefab, itemSpawnPoint.position,Quaternion.identity, this.transform);
-
-            weaponItem = weaponItemGameobject.GetComponent<Item>();
-            weaponItem.SetCanBePickedUp(false);
-            weaponItemGameobject.SetActive(false);
-        }
-
+        InitializeItem(healthItemPrefab, ref healthItem, ref healthItemGameObject);
+        InitializeItem(ammoItemPrefab, ref ammoItem, ref ammoItemGameObject);
+        InitializeItem(weaponItemPrefab, ref weaponItem, ref weaponItemGameObject);
 
         if (shouldMaterialize)
-        {
             StartCoroutine(MaterializeChest());
-        }
         else
-        {
             EnableChest();
+    }
+
+    private void InitializeItem(GameObject prefab, ref Item item, ref GameObject itemGameObject)
+    {
+        if (prefab != null)
+        {
+            itemGameObject = Instantiate(prefab, itemSpawnPoint.position, Quaternion.identity, transform);
+            item = itemGameObject.GetComponent<Item>();
+            item.SetCanBePickedUp(false);
+            itemGameObject.SetActive(false);
         }
     }
 
-    /// <summary>
-    /// Materialise the chest
-    /// </summary>
     private IEnumerator MaterializeChest()
     {
-        SpriteRenderer[] spriteRendererArray = new SpriteRenderer[] { spriteRenderer };
-
+        SpriteRenderer[] spriteRendererArray = { spriteRenderer };
         yield return StartCoroutine(materializeEffect.MaterializeRoutine(GameResources.Instance.materializeShader, materializeColor, materializeTime, spriteRendererArray, GameResources.Instance.litMaterial));
-
         EnableChest();
     }
 
-    /// <summary>
-    /// Enable the chest
-    /// </summary>
-    private void EnableChest()
-    {
-        // Set use to enabled
-        isEnabled = true;
-    }
+    private void EnableChest() => isEnabled = true;
 
-    /// <summary>
-    /// Use the chest - action will vary depending on the chest state
-    /// </summary>
     public void PickUpItem()
     {
         if (!isEnabled) return;
@@ -145,15 +87,15 @@ public class Chest : MonoBehaviour, IPickable
                 break;
 
             case ChestState.healthItem:
-                CollectHealthItem();
+                CollectItem(healthItem);
                 break;
 
             case ChestState.ammoItem:
-                CollectAmmoItem();
+                CollectItem(ammoItem);
                 break;
 
             case ChestState.weaponItem:
-                CollectWeaponItem();
+                CollectItem(weaponItem);
                 break;
 
             case ChestState.empty:
@@ -164,38 +106,34 @@ public class Chest : MonoBehaviour, IPickable
         }
     }
 
-    /// <summary>
-    /// Open the chest on first use
-    /// </summary>
     private void OpenChest()
     {
         animator.SetBool(Settings.use, true);
-
-        // chest open sound effect
         SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.chestOpen);
 
-        UpdateChestState();
+        // Added delay 0.5s after opening the chest
+        StartCoroutine(DelayCoroutine(0.5f, () =>
+        {
+            UpdateChestState();
+        }));
     }
 
-    /// <summary>
-    /// Create items based on what should be spawned and the chest state
-    /// </summary>
     private void UpdateChestState()
     {
         if (healthItem != null)
         {
             chestState = ChestState.healthItem;
-            healthItemGameobject.SetActive(true);
+            healthItemGameObject.SetActive(true);
         }
         else if (ammoItem != null)
         {
             chestState = ChestState.ammoItem;
-            ammoItemGameobject.SetActive(true);
+            ammoItemGameObject.SetActive(true);
         }
         else if (weaponItem != null)
         {
             chestState = ChestState.weaponItem;
-            weaponItemGameobject.SetActive(true);
+            weaponItemGameObject.SetActive(true);
         }
         else
         {
@@ -203,91 +141,35 @@ public class Chest : MonoBehaviour, IPickable
         }
     }
 
-    /// <summary>
-    /// Collect the health item and add it to the players health
-    /// </summary>
-    private void CollectHealthItem()
+    private void CollectItem(Item item)
     {
-        if (healthItem != null)
+        if (item != null)
         {
-            healthItem.InventoryItem.ActionOnPickup(healthItem);
-        }
+            float delay = item.duration + 0.1f;
 
-        if (healthItem == null)
-        {
-            UpdateChestState();
-        }
+            item.InventoryItem.ActionOnPickup(item);
 
-        //// Add health to player
-        //GameManager.Instance.GetPlayer().health.AddHealth(healthPercent);
-
-        //// Play pickup sound effect
-        //SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.healthPickup);
-
-        //healthPercent = 0;
-
-        //Destroy(chestItemGameObject);
-
-        //UpdateChestState();
-    }
-
-    /// <summary>
-    /// Collect an ammo item and add it to the ammo in the players current weapon
-    /// </summary>
-    private void CollectAmmoItem()
-    {
-        if (ammoItem != null)
-        {
-            ammoItem.InventoryItem.ActionOnPickup(ammoItem);
-        }
-
-        if (ammoItem == null)
-        {
-            UpdateChestState();
-        }
-        //// Check item exists and has been materialized
-        //if (chestItem == null || !chestItem.isItemMaterialized) return;
-
-        //Player player = GameManager.Instance.GetPlayer();
-
-        //// Update ammo for current weapon
-        //player.reloadWeaponEvent.CallReloadWeaponEvent(player.activeWeapon.GetCurrentWeapon(), ammoPercent);
-
-        //// Play pickup sound effect
-        //SoundEffectManager.Instance.PlaySoundEffect(GameResources.Instance.ammoPickup);
-
-        //ammoPercent = 0;
-
-        //Destroy(chestItemGameObject);
-
-        //UpdateChestState();
-    }
-
-    /// <summary>
-    /// Collect the weapon and add it to the players weapons list
-    /// </summary>
-    private void CollectWeaponItem()
-    {
-        if (weaponItem != null)
-        {
-            weaponItem.InventoryItem.ActionOnPickup(weaponItem);
-        }
-
-        if (weaponItem == null)
-        {
-            UpdateChestState();
+            // Waiting for demoterialize effect
+            StartCoroutine(DelayCoroutine(delay, () =>
+            {
+                if (item == null) UpdateChestState();
+            }));
         }
     }
 
-    /// <summary>
-    /// Display message above chest
-    /// </summary>
+
+    private IEnumerator DelayCoroutine(float delayTime, System.Action onComplete)
+    {
+        yield return new WaitForSeconds(delayTime);
+
+        // Call the passed action after the delay ends
+        if (onComplete != null) onComplete.Invoke();
+    }
+
     private IEnumerator DisplayMessage(string messageText, float messageDisplayTime)
     {
         messageTextTMP.text = messageText;
-
         yield return new WaitForSeconds(messageDisplayTime);
-
         messageTextTMP.text = "";
     }
 }

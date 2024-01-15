@@ -19,8 +19,7 @@ public class Item : MonoBehaviour, IPickable
 
     public SoundEffectSO soundEffect;
 
-    [SerializeField]
-    private float duration = 0.3f;
+    public float duration = 0.3f;
 
 
     private void Awake()

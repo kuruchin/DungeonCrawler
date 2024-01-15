@@ -266,6 +266,10 @@ public class GameManager : SingletonMonobehaviour<GameManager>
                 {
                     PauseGameMenu();
                 }
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    DisplayInventory();
+                }
 
                 break;
 
@@ -308,6 +312,10 @@ public class GameManager : SingletonMonobehaviour<GameManager>
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     PauseGameMenu();
+                }
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    DisplayInventory();
                 }
 
                 break;
