@@ -97,7 +97,7 @@ public class Player : MonoBehaviour
         this.playerDetails = playerDetails;
 
         //Create player starting weapons
-        //CreatePlayerStartingWeapons();
+        CreatePlayerStartingItems();
 
 
         // Set player starting health
@@ -129,15 +129,25 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the player starting weapon
+    /// Set the player starting items
     /// </summary>
-    private void CreatePlayerStartingWeapons()
+    private void CreatePlayerStartingItems()
     {
         // Populate weapon list from starting weapons
-        foreach (WeaponDetailsSO weaponDetails in playerDetails.startingWeaponList)
+        foreach (var item in playerDetails.startingItemList)
         {
-            // Add weapon to player
-            AddWeaponToPlayer(weaponDetails);
+            var createdItem = Instantiate(item);
+
+            IPickable iPickable = createdItem.GetComponent<IPickable>();
+
+            if (iPickable != null)
+            {
+                // Need to check if item can be picked up. This may not be possible if it is in the chest
+                if (iPickable.CanBePickedUp())
+                {
+                    iPickable.PickUpItem();
+                }
+            }
         }
     }
 

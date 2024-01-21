@@ -77,7 +77,7 @@ public class ReloadWeapon : MonoBehaviour
         }
 
         // Check for no ammo and break
-        if (totalRemainingAmmo == 0)
+        if (totalRemainingAmmo == 0 && !weapon.weaponDetails.hasInfiniteAmmo)
         {
             yield break;
         }

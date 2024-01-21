@@ -216,4 +216,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsTable: {fileID: 11400000, guid: f73daa37359aa75478b5a7c0eefc67b8, type: 2}
-  chanceToDropAmmo: 0
+  chanceToDropAmmo: 20

@@ -4255,7 +4255,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 714959731}
   m_HandleRect: {fileID: 714959730}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4582,7 +4582,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1617922125}
   m_HandleRect: {fileID: 1617922124}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6591,7 +6591,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.5376107, y: 1}
+    m_SensorSize: {x: 1.5353982, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7106,7 +7106,7 @@ MonoBehaviour:
     ModeOverride: 1
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.5376107, y: 1}
+    m_SensorSize: {x: 1.5353982, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

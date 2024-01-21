@@ -13,6 +13,11 @@ public class DropOnDestroy : MonoBehaviour
 
     private void Start()
     {
+
+    }
+
+    private void OnEnable()
+    {
         destroyable = GetComponent<IDestroyable>();
 
         if (destroyable != null)

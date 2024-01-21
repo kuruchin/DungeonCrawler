@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AmmoItem_Light
   m_EditorClassIdentifier: 
   <IsStackable>k__BackingField: 1
-  <MaxStackSize>k__BackingField: 20
+  <MaxStackSize>k__BackingField: 32
   <Name>k__BackingField: AmmoThird
   <Description>k__BackingField: Third type ammo
-  <ItemImage>k__BackingField: {fileID: 6066325612735239030, guid: bee788f20afa17348a76a18539d7439c, type: 3}
+  <ItemImage>k__BackingField: {fileID: -7173003525342006096, guid: bee788f20afa17348a76a18539d7439c, type: 3}
   <DefaultParametersList>k__BackingField: []
   ammoType: 1

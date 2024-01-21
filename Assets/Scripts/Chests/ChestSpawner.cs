@@ -59,17 +59,14 @@ public class ChestSpawner : MonoBehaviour
     #region Tooltip
     [Tooltip("The weapons to spawn for each dungeon level and their spawn ratios")]
     #endregion Tooltip
-    [SerializeField] private List<SpawnableObjectsByLevel<WeaponDetailsSO>> weaponSpawnByLevelList;
     [SerializeField] private List<SpawnableObjectsByLevel<GameObject>> weaponItemSpawnByLevelList;
     #region Tooltip
     [Tooltip("The range of health to spawn for each level")]
     #endregion Tooltip
-    [SerializeField] private List<RangeByLevel> healthSpawnByLevelList;
     [SerializeField] private List<SpawnableObjectsByLevel<GameObject>> consumableSpawnByLevelList;
     #region Tooltip
     [Tooltip("The range of ammo to spawn for each level")]
     #endregion Tooltip
-    [SerializeField] private List<RangeByLevel> ammoSpawnByLevelList;
     [SerializeField] private List<SpawnableObjectsByLevel<GameObject>> ammoItemSpawnByLevelList;
 
     private bool chestSpawned = false;
@@ -245,18 +242,18 @@ public class ChestSpawner : MonoBehaviour
     /// </summary>
     private int GetAmmoPercentToSpawn(int ammoNumber)
     {
-        if (ammoNumber == 0) return 0;
+        //if (ammoNumber == 0) return 0;
 
-        var currentDungeonLevel = GameManager.Instance.GetCurrentDungeonLevel();
+        //var currentDungeonLevel = GameManager.Instance.GetCurrentDungeonLevel();
 
-        // Get ammo spawn percent range for level
-        foreach (RangeByLevel spawnPercentByLevel in ammoSpawnByLevelList)
-        {
-            if (spawnPercentByLevel.dungeonLevel == currentDungeonLevel)
-            {
-                return Random.Range(spawnPercentByLevel.min, spawnPercentByLevel.max);
-            }
-        }
+        //// Get ammo spawn percent range for level
+        //foreach (RangeByLevel spawnPercentByLevel in ammoSpawnByLevelList)
+        //{
+        //    if (spawnPercentByLevel.dungeonLevel == currentDungeonLevel)
+        //    {
+        //        return Random.Range(spawnPercentByLevel.min, spawnPercentByLevel.max);
+        //    }
+        //}
 
         return 0;
     }
@@ -279,16 +276,16 @@ public class ChestSpawner : MonoBehaviour
     /// </summary>
     private int GetHealthPercentToSpawn(int healthNumber)
     {
-        if (healthNumber == 0) return 0;
+        //if (healthNumber == 0) return 0;
 
-        // Get ammo spawn percent range for level
-        foreach (RangeByLevel spawnPercentByLevel in healthSpawnByLevelList)
-        {
-            if (spawnPercentByLevel.dungeonLevel == GameManager.Instance.GetCurrentDungeonLevel())
-            {
-                return Random.Range(spawnPercentByLevel.min, spawnPercentByLevel.max);
-            }
-        }
+        //// Get ammo spawn percent range for level
+        //foreach (RangeByLevel spawnPercentByLevel in healthSpawnByLevelList)
+        //{
+        //    if (spawnPercentByLevel.dungeonLevel == GameManager.Instance.GetCurrentDungeonLevel())
+        //    {
+        //        return Random.Range(spawnPercentByLevel.min, spawnPercentByLevel.max);
+        //    }
+        //}
 
         return 0;
     }

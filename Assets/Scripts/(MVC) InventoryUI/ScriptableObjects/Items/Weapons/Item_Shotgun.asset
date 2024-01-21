@@ -19,8 +19,6 @@ MonoBehaviour:
   <ItemImage>k__BackingField: {fileID: 21300000, guid: 957e7c5a4532c7b4fa28cd31bf5aee5d, type: 3}
   <DefaultParametersList>k__BackingField:
   - itemParameter: {fileID: 11400000, guid: 095306fb71eee094e9b27ac30fcec610, type: 2}
-    value: 3
-  - itemParameter: {fileID: 11400000, guid: cf5ed90c3a559d34fafaf146fa7e5e62, type: 2}
-    value: 0
+    value: 4
   weaponDetails: {fileID: 11400000, guid: e45ac7bcf4447f6498332cc96022174c, type: 2}
   <actionSFX>k__BackingField: {fileID: 0}

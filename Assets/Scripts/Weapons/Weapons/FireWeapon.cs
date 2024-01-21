@@ -122,7 +122,7 @@ public class FireWeapon : MonoBehaviour
             AmmoType currentWeaponAmmoType = activeWeapon.GetCurrentWeapon().weaponDetails.weaponCurrentAmmo.ammoType;
             int remainingAmmo = GameManager.Instance.GetPlayer().inventoryController.GetTotalAmmoByType(currentWeaponAmmoType);
 
-            if (remainingAmmo > 0)
+            if (remainingAmmo > 0 || activeWeapon.GetCurrentWeapon().weaponDetails.hasInfiniteAmmo)
             {
                 // trigger a reload weapon event.
                 reloadWeaponEvent.CallReloadWeaponEvent(activeWeapon.GetCurrentWeapon(), 0);

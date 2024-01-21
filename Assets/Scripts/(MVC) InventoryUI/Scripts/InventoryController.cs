@@ -33,6 +33,11 @@ namespace Inventory
 
         private void Start()
         {
+
+        }
+
+        private void Awake()
+        {
             inventoryUI = FindObjectOfType<UIInventoryPage>();
 
             player = GetComponent<Player>();
@@ -323,7 +328,7 @@ namespace Inventory
             if (item != null)
             {
                 // Play pickup sound effect
-                SoundEffectManager.Instance.PlaySoundEffect(item.soundEffect);
+                SoundEffectManager.Instance?.PlaySoundEffect(item.soundEffect);
 
                 // TODO: equip weapon first
                 int reminder = inventoryData.AddItem(StorageType.Inventory, item.InventoryItem, item.Quantity);

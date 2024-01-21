@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741ce6b8bc3a326468b973395deccc14, type: 3}
+  m_Name: Item_RocketLauncher
+  m_EditorClassIdentifier: 
+  <IsStackable>k__BackingField: 0
+  <MaxStackSize>k__BackingField: 1
+  <Name>k__BackingField: RocketLauncher
+  <Description>k__BackingField: RocketLauncher
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: f4a1e113145591f45bfacfc7d7bf80c5, type: 3}
+  <DefaultParametersList>k__BackingField:
+  - itemParameter: {fileID: 11400000, guid: 095306fb71eee094e9b27ac30fcec610, type: 2}
+    value: 2
+  weaponDetails: {fileID: 11400000, guid: 66985d9a2d5925c46b7e856e4b2c9b53, type: 2}
+  <actionSFX>k__BackingField: {fileID: 0}

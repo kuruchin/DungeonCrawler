@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AmmoItem_Energy
   m_EditorClassIdentifier: 
   <IsStackable>k__BackingField: 1
-  <MaxStackSize>k__BackingField: 20
+  <MaxStackSize>k__BackingField: 24
   <Name>k__BackingField: AmmoFirst
   <Description>k__BackingField: First type ammo
-  <ItemImage>k__BackingField: {fileID: -7173003525342006096, guid: bee788f20afa17348a76a18539d7439c, type: 3}
+  <ItemImage>k__BackingField: {fileID: 6495033326967414993, guid: bee788f20afa17348a76a18539d7439c, type: 3}
   <DefaultParametersList>k__BackingField: []
   ammoType: 3

@@ -15,18 +15,20 @@ MonoBehaviour:
   levelName: The Hall Of Heroes
   roomTemplateList:
   - {fileID: 11400000, guid: eb78b86b8a0589f44a91ff8b40a0d0f9, type: 2}
-  - {fileID: 11400000, guid: 17aab39e60e31b44cbb99c260366f725, type: 2}
-  - {fileID: 11400000, guid: 75e9ed4d33bf76c439c799075b936c76, type: 2}
-  - {fileID: 11400000, guid: 58168ebb0df392f41b061a0c6b25da05, type: 2}
-  - {fileID: 11400000, guid: 74c9dcaed5ec2f949878a19a2067a840, type: 2}
-  - {fileID: 11400000, guid: 8560fcec9e5cd454aae62d7775c44da1, type: 2}
-  - {fileID: 11400000, guid: 1d5c4c4b7468b7749bced9ffcf6799be, type: 2}
-  - {fileID: 11400000, guid: a513c365c6072fa4c9068779c5d2173e, type: 2}
-  - {fileID: 11400000, guid: a1c147aa88a50d64dbc012a46f5d011c, type: 2}
-  - {fileID: 11400000, guid: 87fe5855642c1ed4fa712068549e637e, type: 2}
-  - {fileID: 11400000, guid: 5ec7c3fd29261984abd0f0a91400645d, type: 2}
-  - {fileID: 11400000, guid: 441b01f46e3eeb442ade8694ca990dae, type: 2}
-  - {fileID: 11400000, guid: 5e10298487db4a548a9e425ea037c915, type: 2}
-  - {fileID: 11400000, guid: b497cf51860cc124088acdf3dfcc4bdc, type: 2}
+  - {fileID: 11400000, guid: 685a9e88ad3a01840be4df34a129a7c9, type: 2}
+  - {fileID: 11400000, guid: 77cf9e26466dcb8478dcd500a37207be, type: 2}
+  - {fileID: 11400000, guid: 4e0cb1d7b76d401418caac56d6b591bd, type: 2}
+  - {fileID: 11400000, guid: 380af0d764303ce4c981f9dfcec41d18, type: 2}
+  - {fileID: 11400000, guid: 23adaf0c651b8df4e8eadd2017d1127a, type: 2}
+  - {fileID: 11400000, guid: 03d019b201452df4f9600371a877069d, type: 2}
+  - {fileID: 11400000, guid: c4ab825728efa6641bb9165e926eb767, type: 2}
+  - {fileID: 11400000, guid: 9261d8a5878c01d4ca8cf28b52c01da6, type: 2}
+  - {fileID: 11400000, guid: 671d7343c354ab4499431c2af4ed5ae6, type: 2}
+  - {fileID: 11400000, guid: 2eb04dd2735119049afac16e3912e2f9, type: 2}
+  - {fileID: 11400000, guid: 0c2ad7d1481161546bd1fa23d000f69a, type: 2}
+  - {fileID: 11400000, guid: af693c9768f5e1a4b9ecb1ef9b0db1c7, type: 2}
+  - {fileID: 11400000, guid: 09158394e593ea443867f16a5990ffa5, type: 2}
+  - {fileID: 11400000, guid: eabdfbe8d239f4446aaf885eff2e4e31, type: 2}
+  - {fileID: 11400000, guid: 877b698ce68747141aa3800b391004af, type: 2}
   roomNodeGraphList:
   - {fileID: 11400000, guid: 633fb2910d66bf444854997bc3abb142, type: 2}

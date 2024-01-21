@@ -155,8 +155,6 @@ public class WeaponStatusUI : MonoBehaviour
 
             //var weaponRemainingAmmo = player.inventoryController.GetCurrentWeaponTotalAmmo();
             UpdateAmmoText(weapon.weaponDetails.hasInfiniteAmmo, weapon.weaponClipRemainingAmmo, totalRemainingAmmo);
-
-            UpdateAmmoLoadedIcons(weapon);
             ResetWeaponReloadBar();
         }
     }
@@ -210,8 +208,6 @@ public class WeaponStatusUI : MonoBehaviour
         var weaponRemainingAmmo = player.inventoryController.GetCurrentWeaponTotalAmmo();
         UpdateAmmoText(weapon.weaponDetails.hasInfiniteAmmo, weapon.weaponClipRemainingAmmo, weaponRemainingAmmo);
 
-        UpdateAmmoLoadedIcons(weapon);
-
         // If set weapon is still reloading then update reload bar
         if (weapon.isWeaponReloading)
         {
@@ -259,38 +255,6 @@ public class WeaponStatusUI : MonoBehaviour
             ammoRemainingText.text = weaponClipRemainingAmmo.ToString() + " / " + weaponRemainingAmmo.ToString();
             //ammoRemainingText.text = weapon.weaponClipRemainingAmmo.ToString() + " / " + weapon.weaponDetails.weaponAmmoCapacity.ToString();
         }
-    }
-
-    /// <summary>
-    /// Update ammo clip icons on the UI
-    /// </summary>
-    private void UpdateAmmoLoadedIcons(Weapon weapon)
-    {
-        ClearAmmoLoadedIcons();
-
-        for (int i = 0; i < weapon.weaponClipRemainingAmmo; i++)
-        {
-            // Instantiate ammo icon prefab
-            GameObject ammoIcon = Instantiate(GameResources.Instance.ammoIconPrefab, ammoHolderTransform);
-
-            ammoIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, Settings.uiAmmoIconSpacing * i);
-
-            ammoIconList.Add(ammoIcon);
-        }
-    }
-
-    /// <summary>
-    /// Clear ammo icons
-    /// </summary>
-    private void ClearAmmoLoadedIcons()
-    {
-        // Loop through icon gameobjects and destroy
-        foreach (GameObject ammoIcon in ammoIconList)
-        {
-            Destroy(ammoIcon);
-        }
-
-        ammoIconList.Clear();
     }
 
     /// <summary>
